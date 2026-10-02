@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archive - My HTML Collection</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="wrap">
+    <h1>📁 My HTML Archive</h1>
+    <p>GitHub Pagesで公開するHTMLコレクション。競馬回顧、考察、まとめをストック。</p>
+    <div class="actions">
+      <a class="btn" href="https://github.com/new" target="_blank">GitHubでリポジトリ作成</a>
+      <a class="btn secondary" href="#howto">追加方法</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="controls">
+    <input id="search" type="search" placeholder="検索: タイトル、タグ、要約..." />
+    <select id="tagFilter"><option value="">すべてのタグ</option></select>
+  </div>
+
+  <div id="list" class="grid"></div>
+
+  <section id="howto" class="howto">
+    <h2>🚀 超簡単追加方法（30秒）</h2>
+    <ol>
+      <li><code>articles/</code> フォルダに <code>xxx.html</code> を置く（今回作ったような単体HTMLでOK）</li>
+      <li><code>data.json</code> に1行追加するだけ：</li>
+    </ol>
+<pre><code>{
+  "id": "my-new-page",
+  "title": "新しいページのタイトル",
+  "file": "my-new-page.html",
+  "date": "2026-10-02",
+  "tags": ["競馬", "考察"],
+  "summary": "一言要約"
+}</code></pre>
+    <p>あとは <code>git add . && git commit -m "add article" && git push</code> でGitHub Pagesに自動反映。Jekyll不要、ビルド不要。</p>
+    <h3>GitHub Pages 公開手順</h3>
+    <ol>
+      <li>このフォルダ一式をGitHubリポジトリにPush（リポジトリ名は <code>username.github.io</code> か任意）</li>
+      <li>GitHub > Settings > Pages > Source: <code>Deploy from a branch</code> > Branch: <code>main / root</code></li>
+      <li>数分後に <code>https://username.github.io/xxx/</code> で公開</li>
+    </ol>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">Built for GitHub Pages • No build step • Just add HTML</div>
+</footer>
+
+<script>
+async function load(){
+  const res = await fetch('data.json?'+Date.now());
+  const data = await res.json();
+  const list = document.getElementById('list');
+  const search = document.getElementById('search');
+  const tagFilter = document.getElementById('tagFilter');
+
+  const allTags = [...new Set(data.flatMap(d=>d.tags))];
+  allTags.forEach(t=>{
+    const o=document.createElement('option'); o.value=t; o.textContent=t; tagFilter.appendChild(o);
+  });
+
+  function render(filterText="", filterTag=""){
+    list.innerHTML="";
+    const filtered = data.filter(d=>{
+      const text = (d.title+d.summary+d.tags.join("")).toLowerCase();
+      const okText = !filterText || text.includes(filterText.toLowerCase());
+      const okTag = !filterTag || d.tags.includes(filterTag);
+      return okText && okTag;
+    }).sort((a,b)=> b.date.localeCompare(a.date));
+
+    filtered.forEach(d=>{
+      const el=document.createElement('a');
+      el.className='card';
+      el.href='articles/'+d.file;
+      el.innerHTML=`
+        <div class="card-date">${d.date}</div>
+        <h3>${d.title}</h3>
+        <p>${d.summary}</p>
+        <div class="tags">${d.tags.map(t=>`<span>#${t}</span>`).join("")}</div>
+      `;
+      list.appendChild(el);
+    });
+    if(!filtered.length){
+      list.innerHTML='<p style="opacity:.6">該当する記事がありません</p>';
+    }
+  }
+
+  search.addEventListener('input',()=>render(search.value, tagFilter.value));
+  tagFilter.addEventListener('change',()=>render(search.value, tagFilter.value));
+  render();
+}
+load();
+</script>
+</body>
+</html>
