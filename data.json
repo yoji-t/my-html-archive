@@ -22,5 +22,16 @@
       "Copilot"
     ],
     "summary": "Copilotをつかって会社用のきれいな資料のつくりかた"
+  }, 
+  {
+    "id": "chest_thorax_pitching_drill_summary",
+    "title": "投げ方ドリル要約",
+    "file": "chest_thorax_pitching_drill_summary.html",
+    "date": "2026-10-02",
+    "tags": [
+      "少年野球",
+      "ドリル"
+    ],
+    "summary": "chest_thorax_pitching_drill_summary"
   }
 ]
