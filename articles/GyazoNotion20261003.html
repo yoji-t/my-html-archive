@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gyazo → Notion iPhoneショートカット完全ガイド</title>
+  <style>
+    :root {
+      --bg: #f5f7fa;
+      --card: #ffffff;
+      --text: #222;
+      --muted: #667085;
+      --accent: #2383e2;
+      --accent-light: #eaf4ff;
+      --border: #e4e7ec;
+      --code-bg: #17202a;
+      --success: #198754;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans",
+        "Yu Gothic",
+        Meiryo,
+        sans-serif;
+      line-height: 1.8;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffffff, #eef6ff);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.05);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.4;
+    }
+
+    h2 {
+      margin-top: 42px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--border);
+      font-size: 23px;
+    }
+
+    h3 {
+      margin-top: 28px;
+      font-size: 19px;
+    }
+
+    p {
+      margin: 12px 0;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px;
+      margin: 20px 0;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.04);
+    }
+
+    .important {
+      border-left: 5px solid var(--accent);
+      background: var(--accent-light);
+    }
+
+    .warning {
+      border-left: 5px solid #f59e0b;
+      background: #fff8e8;
+    }
+
+    .success {
+      border-left: 5px solid var(--success);
+      background: #edf9f1;
+    }
+
+    .step {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .number {
+      flex: 0 0 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      background: white;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: #f2f4f7;
+      padding: 18px;
+      border-radius: 12px;
+      overflow-x: auto;
+      line-height: 1.6;
+      font-size: 13px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    code {
+      font-family:
+        SFMono-Regular,
+        Consolas,
+        "Liberation Mono",
+        monospace;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 24px 0;
+    }
+
+    .flow-item {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+
+    .arrow {
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    ul, ol {
+      padding-left: 24px;
+    }
+
+    .checklist li {
+      margin: 8px 0;
+    }
+
+    .result {
+      background: #111827;
+      color: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin: 20px 0;
+    }
+
+    .result h3 {
+      margin-top: 0;
+    }
+
+    .notion-page {
+      background: white;
+      color: #222;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 16px;
+      border: 1px solid #ddd;
+    }
+
+    .fake-image {
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f2f4f7;
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      color: #667085;
+      margin: 15px 0;
+    }
+
+    .footer {
+      margin-top: 50px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 12px 10px 40px;
+      }
+
+      header {
+        padding: 24px 18px;
+        border-radius: 16px;
+      }
+
+      h1 {
+        font-size: 23px;
+      }
+
+      h2 {
+        font-size: 20px;
+      }
+
+      .card {
+        padding: 17px;
+      }
+
+      pre {
+        font-size: 12px;
+        padding: 14px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <header>
+    <div class="badge">iPhone × Gyazo × Notion</div>
+    <h1>Gyazoの画像をNotionに簡単保存する方法</h1>
+    <p class="lead">
+      Makeなどの外部自動化サービスを使わず、
+      iPhoneの「ショートカット」とNotion APIを使って、
+      Gyazoの画像をNotionで管理する方法を解説します。
+    </p>
+  </header>
+
+  <div class="card important">
+    <h3>結論</h3>
+    <p>
+      おすすめは、
+      <strong>Gyazo → iPhoneショートカット → Notion</strong>
+      という構成です。
+    </p>
+
+    <div class="flow">
+      <div class="flow-item">📸 Gyazoで撮影</div>
+      <div class="arrow">→</div>
+      <div class="flow-item">📤 共有</div>
+      <div class="arrow">→</div>
+      <div class="flow-item">⚡ ショートカット</div>
+      <div class="arrow">→</div>
+      <div class="flow-item">📝 Notion</div>
+    </div>
+
+    <p>
+      普段の操作は、
+      <strong>Gyazoで撮影 → 共有 → 「Gyazo → Notion」</strong>
+      だけにできます。
+    </p>
+  </div>
+
+  <h2>1. 今回の仕組み</h2>
+
+  <p>
+    単純にGyazoのURLをNotionへ貼り付けるだけではなく、
+    Notion APIを使って<strong>画像ブロック</strong>として登録します。
+  </p>
+
+  <div class="card">
+    <div class="flow">
+      <div class="flow-item">Gyazo</div>
+      <div class="arrow">→</div>
+      <div class="flow-item">iPhone</div>
+      <div class="arrow">→</div>
+      <div class="flow-item">Notion API</div>
+      <div class="arrow">→</div>
+      <div class="flow-item">画像ブロック</div>
+    </div>
+  </div>
+
+  <div class="card warning">
+    <h3>⚠️ 重要</h3>
+    <p>
+      今回はまず、
+      <strong>Gyazoの画像URLをNotionの画像ブロックとして表示する方式</strong>
+      を採用します。
+    </p>
+    <p>
+      そのため、MakeやZapierなどの外部自動化サービスは必要ありません。
+    </p>
+  </div>
+
+  <h2>2. Notionに「Gyazo Inbox」を作る</h2>
+
+  <p>
+    まずNotionに新しいデータベースを作成します。
+  </p>
+
+  <div class="card">
+    <h3>データベース名</h3>
+    <p><strong>📥 Gyazo Inbox</strong></p>
+
+    <h3>おすすめプロパティ</h3>
+
+    <table>
+      <thead>
+        <tr>
+          <th>プロパティ</th>
+          <th>種類</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>名前</td>
+          <td>タイトル</td>
+        </tr>
+        <tr>
+          <td>Gyazo URL</td>
+          <td>URL</td>
+        </tr>
+        <tr>
+          <td>撮影日時</td>
+          <td>日付</td>
+        </tr>
+        <tr>
+          <td>ステータス</td>
+          <td>セレクト</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>ステータスは、例えば以下で十分です。</p>
+
+    <ul>
+      <li>未整理</li>
+      <li>保存</li>
+      <li>不要</li>
+    </ul>
+  </div>
+
+  <h2>3. Notionの連携を作る</h2>
+
+  <div class="step">
+    <div class="number">1</div>
+    <div>
+      Notionの設定を開きます。
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="number">2</div>
+    <div>
+      <strong>My connections / Connections</strong>
+      を開きます。
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="number">3</div>
+    <div>
+      <strong>Create new integration</strong>
+      を選択します。
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="number">4</div>
+    <div>
+      名前を
+      <strong>Gyazo Shortcut</strong>
+      などにします。
+    </div>
+  </div>
+
+  <div class="card warning">
+    <h3>🔐 API Secretについて</h3>
+    <p>
+      作成するとNotionのIntegration Secretが発行されます。
+    </p>
+    <p>
+      これはパスワードと同じように扱ってください。
+      他人に公開したり、SNSなどに貼り付けたりしないでください。
+    </p>
+  </div>
+
+  <h2>4. Gyazo Inboxを連携に共有する</h2>
+
+  <p>
+    Notion APIからデータベースへ書き込めるように、
+    「Gyazo Inbox」を作成したIntegrationに共有します。
+  </p>
+
+  <div class="card">
+    <ol>
+      <li>「Gyazo Inbox」を開く</li>
+      <li>右上の「•••」をタップ</li>
+      <li>Connectionsを開く</li>
+      <li>作成した「Gyazo Shortcut」を追加</li>
+    </ol>
+  </div>
+
+  <div class="card important">
+    <strong>ここは忘れやすいポイントです。</strong>
+    <p>
+      Integrationを作っただけでは、Notionのデータベースへアクセスできません。
+      必ず「Gyazo Inbox」をIntegrationに共有してください。
+    </p>
+  </div>
+
+  <h2>5. NotionのデータベースIDを確認する</h2>
+
+  <p>
+    「Gyazo Inbox」のURLを確認します。
+  </p>
+
+  <pre><code>https://www.notion.so/xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx?v=yyyy</code></pre>
+
+  <p>
+    長い英数字部分がIDになります。
+  </p>
+
+  <div class="card warning">
+    <p>
+      現在のNotion APIでは、
+      <strong>Database</strong>と<strong>Data Source</strong>の扱いが分かれている部分があります。
+    </p>
+    <p>
+      実際のAPI設定では、使用しているNotion環境に合わせて
+      Data Source IDなどを確認する必要があります。
+    </p>
+  </div>
+
+  <h2>6. iPhoneのショートカットを作る</h2>
+
+  <div class="step">
+    <div class="number">1</div>
+    <div>
+      iPhoneの<strong>ショートカット</strong>アプリを開きます。
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="number">2</div>
+    <div>
+      右上の<strong>＋</strong>をタップします。
+    </div>
+  </div>
+
+  <div class="step">
+    <div class="number">3</div>
+    <div>
+      ショートカット名を
+      <strong>📸 Gyazo → Notion</strong>
+      にします。
+    </div>
+  </div>
+
+  <h2>7. 共有シートから実行できるようにする</h2>
+
+  <p>
+    ショートカットの詳細設定で、
+    <strong>「共有シートに表示」</strong>
+    をONにします。
+  </p>
+
+  <p>
+    受け取る入力として<strong>URL</strong>を設定します。
+  </p>
+
+  <div class="card success">
+    <p><strong>完成するとこうなります。</strong></p>
+
+    <pre><code>Gyazoで画像を撮影
+        ↓
+共有
+        ↓
+「Gyazo → Notion」
+        ↓
+Notionへ登録</code></pre>
+  </div>
+
+  <h2>8. Gyazo URLを受け取る</h2>
+
+  <p>
+    ショートカットの入力として、
+    GyazoのURLを受け取ります。
+  </p>
+
+  <pre><code>ショートカット入力
+        ↓
+Gyazo URL</code></pre>
+
+  <p>
+    例えば、
+  </p>
+
+  <pre><code>https://gyazo.com/xxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
+
+  <p>
+    のようなURLです。
+  </p>
+
+  <h2>9. Gyazo APIから画像情報を取得する</h2>
+
+  <p>
+    Gyazoには公式APIがあり、画像情報を取得できます。
+  </p>
+
+  <p>取得できる情報には、例えば以下があります。</p>
+
+  <ul>
+    <li>画像ID</li>
+    <li>GyazoページURL</li>
+    <li>画像URL</li>
+    <li>サムネイルURL</li>
+    <li>撮影関連情報</li>
+  </ul>
+
+  <p>
+    重要なのは、
+    <strong>GyazoのページURLから、画像そのもののURLを取得する</strong>
+    ことです。
+  </p>
+
+  <pre><code>GyazoページURL
+      ↓
+Gyazo API
+      ↓
+画像URL
+      ↓
+https://i.gyazo.com/xxxxxxxx.png</code></pre>
+
+  <h2>10. Notion APIに送信する</h2>
+
+  <p>
+    iPhoneショートカットの
+    <strong>「URLの内容を取得」</strong>
+    アクションを使います。
+  </p>
+
+  <p>送信先：</p>
+
+  <pre><code>https://api.notion.com/v1/pages</code></pre>
+
+  <p>メソッド：</p>
+
+  <pre><code>POST</code></pre>
+
+  <h3>ヘッダー</h3>
+
+  <pre><code>Authorization: Bearer YOUR_NOTION_SECRET
+Notion-Version: 2026-03-11
+Content-Type: application/json</code></pre>
+
+  <div class="card warning">
+    <strong>注意：</strong>
+    <p>
+      <code>YOUR_NOTION_SECRET</code>は、
+      実際にNotionで発行したIntegration Secretに置き換えます。
+    </p>
+  </div>
+
+  <h2>11. Notionへ送るJSON</h2>
+
+  <p>
+    Notion APIには、
+    「これは画像ブロックです」と指定して送ります。
+  </p>
+
+  <pre><code>{
+  "parent": {
+    "data_source_id": "あなたのデータソースID"
+  },
+  "properties": {
+    "名前": {
+      "title": [
+        {
+          "text": {
+            "content": "Gyazo画像"
+          }
+        }
+      ]
+    }
+  },
+  "children": [
+    {
+      "object": "block",
+      "type": "image",
+      "image": {
+        "type": "external",
+        "external": {
+          "url": "Gyazoの画像URL"
+        }
+      }
+    }
+  ]
+}</code></pre>
+
+  <div class="card important">
+    <h3>ここが最大のポイント</h3>
+    <p>
+      単純に、
+    </p>
+
+    <pre><code>https://gyazo.com/xxxxx</code></pre>
+
+    <p>
+      というリンクを貼るのではありません。
+    </p>
+
+    <p>
+      Notion APIに<strong>imageブロック</strong>として登録します。
+    </p>
+  </div>
+
+  <h2>12. Notionでどう見えるか</h2>
+
+  <div class="notion-page">
+    <h3>📸 Gyazo画像 2026-10-03 19:52</h3>
+
+    <div class="fake-image">
+      🖼️ Gyazoの画像がここに表示されます
+    </div>
+
+    <p>
+      🔗 <strong>Gyazoで開く</strong>
+    </p>
+
+    <p>
+      📅 2026/10/03 19:52
+    </p>
+
+    <p>
+      🏷 未整理
+    </p>
+  </div>
+
+  <h2>13. さらに便利にする</h2>
+
+  <p>
+    ショートカットからNotionへ登録するときに、
+    画像だけでなく追加情報も一緒に登録できます。
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>情報</th>
+        <th>用途</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>画像</td>
+        <td>スクリーンショット本体</td>
+      </tr>
+      <tr>
+        <td>Gyazo URL</td>
+        <td>元のGyazoページを開く</td>
+      </tr>
+      <tr>
+        <td>撮影日時</td>
+        <td>いつ保存したか確認</td>
+      </tr>
+      <tr>
+        <td>ステータス</td>
+        <td>未整理・保存・不要など</td>
+      </tr>
+      <tr>
+        <td>メモ</td>
+        <td>自分のコメント</td>
+      </tr>
+      <tr>
+        <td>OCR</td>
+        <td>画像内の文字を検索・AI分析</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>14. 最終的な運用イメージ</h2>
+
+  <div class="result">
+    <h3>📱 普段やること</h3>
+
+    <pre><code>① Gyazoでスクリーンショット
+        ↓
+② 共有
+        ↓
+③ 「Gyazo → Notion」
+        ↓
+④ 完了</code></pre>
+
+    <p>
+      これだけです。
+    </p>
+  </div>
+
+  <h2>15. 最終形の構成</h2>
+
+  <div class="card">
+    <pre><code>                  ┌──────────────┐
+                  │    Gyazo     │
+                  │   元画像      │
+                  └──────┬───────┘
+                         │
+                         │
+                    iPhone
+                   Shortcut
+                         │
+                         ▼
+                  ┌──────────────┐
+                  │  Notion API  │
+                  └──────┬───────┘
+                         │
+                         ▼
+                  ┌──────────────┐
+                  │    Notion    │
+                  │              │
+                  │ 画像          │
+                  │ カテゴリ       │
+                  │ メモ          │
+                  │ OCR           │
+                  │ Gyazo URL     │
+                  └──────┬───────┘
+                         │
+                         ▼
+                       AI
+                 横断検索・分析</code></pre>
+  </div>
+
+  <h2>16. さらに進化させるなら</h2>
+
+  <div class="card">
+    <h3>STEP 1</h3>
+    <p><strong>Gyazo → Notion</strong></p>
+
+    <h3>STEP 2</h3>
+    <p><strong>Gyazo → Notion + OCR</strong></p>
+
+    <h3>STEP 3</h3>
+    <p><strong>Gyazo → Notion + AI自動分類</strong></p>
+
+    <h3>STEP 4</h3>
+    <p><strong>Notionに蓄積した画像をAIで横断分析</strong></p>
+  </div>
+
+  <h2>17. Notion側に画像そのものを保存する方法</h2>
+
+  <p>
+    現在のNotion APIには
+    <strong>File Upload API</strong>
+    もあります。
+  </p>
+
+  <p>
+    そのため、将来的には、
+  </p>
+
+  <pre><code>Gyazo画像
+    ↓
+画像データ取得
+    ↓
+Notion File Upload API
+    ↓
+Notionにファイルとして保存
+    ↓
+Notion画像ブロックに添付</code></pre>
+
+  <p>
+    という構成にもできます。
+  </p>
+
+  <div class="card success">
+    <h3>おすすめの進め方</h3>
+
+    <ol class="checklist">
+      <li>まず「Gyazo URL → Notion画像表示」を作る</li>
+      <li>正常に動いたらOCRを追加する</li>
+      <li>その後、必要ならNotionへの画像ファイル保存に進む</li>
+      <li>最後にAIによる自動分類・要約を追加する</li>
+    </ol>
+
+    <p>
+      最初から全部自動化するより、
+      <strong>小さく作って動作確認しながら拡張する</strong>
+      方が失敗しにくいです。
+    </p>
+  </div>
+
+  <h2>18. 参考資料</h2>
+
+  <ul>
+    <li>
+      Gyazo API：
+      <a href="https://gyazo.com/api/docs" target="_blank">
+        https://gyazo.com/api/docs
+      </a>
+    </li>
+    <li>
+      Notion API：
+      <a href="https://developers.notion.com/reference/block" target="_blank">
+        Notion API - Block
+      </a>
+    </li>
+    <li>
+      Notion File Upload：
+      <a href="https://developers.notion.com/reference/file-upload" target="_blank">
+        Notion API - File Upload
+      </a>
+    </li>
+  </ul>
+
+  <div class="footer">
+    Gyazo × iPhoneショートカット × Notion 活用ガイド
+  </div>
+
+</div>
+
+</body>
+</html>
