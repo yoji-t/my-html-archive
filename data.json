@@ -66,5 +66,16 @@
       "AI"
     ],
     "summary": "特許分析用プロンプト"
+  },
+   {
+    "id": "htmlfylemaking_20261003",
+    "title": "HTMLファイルを作成できるサービス",
+    "file": "htmlfylemaking_20261003.html",
+    "date": "2026-10-02",
+    "tags": [
+      "HTML",
+      "AI"
+    ],
+    "summary": "HTMLファイルを作成できるサービス"
   }
 ]
