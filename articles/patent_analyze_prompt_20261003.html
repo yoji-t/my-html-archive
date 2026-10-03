@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notion特許情報・分析プロンプト集</title>
+
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --accent: #2563eb;
+    --accent-dark: #1d4ed8;
+    --border: #e5e7eb;
+    --code-bg: #111827;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      "Hiragino Kaku Gothic ProN",
+      "Hiragino Sans",
+      Meiryo,
+      sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+  }
+
+  .hero {
+    background: linear-gradient(135deg, #172554, #2563eb);
+    color: white;
+    padding: 55px 20px 45px;
+  }
+
+  .hero-inner {
+    max-width: 1000px;
+    margin: auto;
+  }
+
+  .hero h1 {
+    margin: 0 0 12px;
+    font-size: clamp(28px, 5vw, 44px);
+  }
+
+  .hero p {
+    margin: 0;
+    opacity: 0.9;
+  }
+
+  main {
+    max-width: 1000px;
+    margin: auto;
+    padding: 32px 16px 60px;
+  }
+
+  .intro {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 25px;
+  }
+
+  .prompt-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin: 20px 0;
+    overflow: hidden;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+  }
+
+  .prompt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .prompt-header h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+
+  .copy-btn {
+    border: none;
+    background: var(--accent);
+    color: white;
+    padding: 9px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .copy-btn:hover {
+    background: var(--accent-dark);
+  }
+
+  .copy-btn.copied {
+    background: #16a34a;
+  }
+
+  pre {
+    margin: 0;
+    padding: 22px;
+    background: var(--code-bg);
+    color: #e5e7eb;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .tip {
+    margin-top: 35px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 14px;
+    padding: 22px;
+  }
+
+  .tip h2 {
+    margin-top: 0;
+  }
+
+  footer {
+    text-align: center;
+    color: var(--muted);
+    padding: 25px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 600px) {
+    .prompt-header {
+      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    .copy-btn {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1>Notion特許情報・分析プロンプト集</h1>
+    <p>
+      Notionに保存した複数の特許情報を横断分析するための実践プロンプト
+    </p>
+  </div>
+</header>
+
+
+<main>
+
+<section class="intro">
+  <strong>使い方</strong><br>
+  Notionに保存した特許情報を参照できるAIに、下のプロンプトを貼り付けて使用してください。
+  各プロンプト右上の「コピー」ボタンから簡単にコピーできます。
+</section>
+
+
+<!-- 1 -->
+<section class="prompt-card">
+
+  <div class="prompt-header">
+    <h2>1. 特許群の全体像を把握する</h2>
+    <button class="copy-btn" onclick="copyPrompt('prompt1', this)">
+      コピー
+    </button>
+  </div>
+
+  <pre id="prompt1">Notionに保存されている特許情報をすべて参照し、全体像を分析してください。
+
+以下の項目で整理してください。
+
+1. 特許の件数
+2. 主な技術分野
+3. 頻繁に登場する技術・構成・材料・製造方法
+4. 各特許が解決しようとしている課題
+5. 各特許の主要な技術的特徴
+6. 複数の特許に共通する技術
+7. 特定の特許にしか見られない特徴
+8. 技術分野ごとのグループ分け
+9. 全体として見えてくる技術開発の方向性
+
+単なる要約ではなく、複数特許を比較して「全体として何が起きているのか」を説明してください。
+
+情報が不足している場合は推測せず、「情報不足」と明記してください。</pre>
+
+</section>
+
+
+<!-- 2 -->
+<section class="prompt-card">
+
+  <div class="prompt-header">
+    <h2>2. 特許同士の「似ている・違う」を分析</h2>
+    <button class="copy-btn" onclick="copyPrompt('prompt2', this)">
+      コピー
+    </button>
+  </div>
+
+  <pre id="prompt2">Notionに保存されている特許を相互比較してください。
+
+特に以下を分析してください。
+
+・技術的に近い特許
+・課題が似ている特許
+・構成が似ている特許
+・効果が似ている特許
+・同じ技術を別のアプローチで実現している特許
+・明確に異なるアプローチを採用している特許
+
+結果を表形式で整理し、
+
+「特許A × 特許B」
+「共通点」
+「相違点」
+「技術的な特徴」
+「差別化ポイント」
+
+の順に説明してください。
+
+表面的に同じ単語が登場するだけの場合は「類似」と判断せず、技術的な意味まで確認してください。</pre>
+
+</section>
+
+
+<!-- 3 -->
+<section class="prompt-card">
+
+  <div class="prompt-header">
+    <h2>3. 技術の「進化」を見る</h2>
+    <button class="copy-btn" onclick="copyPrompt('prompt3', this)">
+      コピー
+    </button>
+  </div>
+
+  <pre id="prompt3">Notionに保存されている特許について、出願日・公開日・優先日などの時系列情報を考慮し、技術がどのように発展してきたのかを分析してください。
+
+以下を整理してください。
+
+1. 初期に登場した基本技術
+2. その後追加された技術
+3. 技術的な改良点
+4. 解決される課題の変化
+5. 材料・構造・製造方法などの変化
+6. 新しく登場した技術要素
+7. 徐々に重要性が高まっている技術
+8. 最近の特許で見られる新しい方向性
+
+最後に、
+
+「この特許群から見る技術開発の流れ」
+
+を時系列で文章化してください。
+
+日付が確認できない場合は推測せず、その旨を明記してください。</pre>
+
+</section>
+
+
+<!-- 4 -->
+<section class="prompt-card">
+
+  <div class="prompt-header">
+    <h2>4. 重要な技術要素を抽出する</h2>
+    <button class="copy-btn" onclick="copyPrompt('prompt4', this)">
+      コピー
+    </button>
+  </div>
+
+  <pre id="prompt4">Notionに保存されている特許群を分析し、繰り返し登場する重要な技術要素を抽出してください。
+
+以下の観点で分析してください。
+
+・複数の特許で登場する技術
+・複数の特許で共通している課題
+・複数の特許で重要な役割を持つ構成
+・最近の特許で新しく登場した技術
+・特定の出願人に特徴的な技術
+・複数の出願人が採用している技術
+
+各技術について、
+
+「技術名」
+「登場する特許」
+「どのような課題を解決するか」
+「どのようなメリットがあるか」
+「他の技術との関係」
+
+を整理してください。
+
+単純な登場回数だけではなく、特許の内容上どれだけ重要な役割を持っているかも説明してください。</pre>
+
+</section>
+
+
+<!-- 5 -->
+<section class="prompt-card">
+
+  <div class="prompt-header">
+    <h2>5. 競合企業・出願人を分析する</h2>
+    <button class="copy-btn" onclick="copyPrompt('prompt5', this)">
+      コピー
+    </button>
+  </div>
+
+  <pre id="prompt5">Notionに保存されている特許情報から、出願人・権利者ごとの特徴を分析してください。
+
+企業・組織ごとに、
+
+・特許件数
+・主要な技術分野
+・主な課題
+・特徴的な技術
+・他社と共通する技術
+・他社とは異なる技術
+・技術開発の方向性
+・時系列で見た変化
+
+を整理してください。
+
+最後に、各社の技術領域を比較できるように表にしてください。
+
+特許件数が多いことと技術的に重要であることは同一視しないでください。</pre>
+
+</section>
+
+
+<!-- 6 -->
+<section class="prompt-card">
+
+  <div class="prompt-header">
+    <h2>6. ホワイトスペースを探す</h2>
+    <button class="copy-btn" onclick="copyPrompt('prompt6', this)">
+      コピー
+    </button>
+  </div>
+
+  <pre id="prompt6">Notionに保存されている特許群を分析し、現在の特許群では十分にカバーされていない技術領域を探してください。
+
+以下を分析してください。
+
+1. 多くの特許が集中している技術領域
+2. 特許が比較的少ない技術領域
+3. 技術的には関連しているが、既存特許では十分に扱われていない領域
+4. 複数特許の組み合わせによって生じる新しい技術領域
+5. 今後技術開発が進む可能性がある領域
+
+ただし、「特許が存在しない」と断定しないでください。
+
+今回Notionに保存されている特許群の範囲では確認できない、という意味で表現してください。
+
+最後に「潜在的なホワイトスペース候補」を一覧化してください。</pre>
+
+</section>
+
+
+<!-- 7 -->
+<section class="prompt-card">
+
+  <div class="prompt-header">
+    <h2>7. 特許の技術マップを作る</h2>
+    <button class="copy-btn" onclick="copyPrompt('prompt7', this)">
+      コピー
+    </button>
+  </div>
+
+  <pre id="prompt7">Notionに保存されている特許をもとに、技術マップを作成してください。
+
+まず特許を技術分野ごとに分類し、
+
+大分類
+↓
+中分類
+↓
+具体的な技術
+↓
+該当する特許
+
+という階層構造で整理してください。
+
+さらに、
+
+・技術同士の関連性
+・複数の技術を組み合わせている特許
+・特定企業に集中している技術
+・複数企業が競合している技術
+・今後重要になりそうな技術領域
+
+も整理してください。
+
+最後に、テキストだけで理解できる「技術マップ」を作成してください。</pre>
+
+</section>
+
+
+<!-- 8 -->
+<section class="prompt-card">
+
+  <div class="prompt-header">
+    <h2>8. 特許群から総合分析する</h2>
+    <button class="copy-btn" onclick="copyPrompt('prompt8', this)">
+      コピー
+    </button>
+  </div>
+
+  <pre id="prompt8">Notionに保存されている特許情報を、ひとつの「特許データベース」として扱ってください。
+
+個々の特許を単独で要約するのではなく、全特許を横断的に分析してください。
+
+以下の観点から、特許群全体から読み取れることを抽出してください。
+
+① 技術トレンド
+② 主要な技術
+③ 技術的な共通点
+④ 技術的な差異
+⑤ 解決しようとしている主要な課題
+⑥ 出願人ごとの特徴
+⑦ 時系列で見た技術の変化
+⑧ 新しく登場した技術
+⑨ 複数特許の組み合わせから見える技術動向
+⑩ 既存特許群では十分にカバーされていない領域
+
+分析結果は、
+
+「重要な発見」
+↓
+「根拠となる特許」
+↓
+「そこから読み取れること」
+
+という形式で整理してください。
+
+特許本文に書かれている事実と、あなたの分析・推論を明確に区別してください。
+
+推論する場合は「推測」「可能性」「示唆」と明記してください。</pre>
+
+</section>
+
+
+<section class="tip">
+
+  <h2>💡 おすすめの使い方</h2>
+
+  <p>
+    特許を追加するたびに個別要約するだけでなく、
+    最後に<strong>「8. 特許群から総合分析する」</strong>を実行すると、
+    データベース全体から技術トレンドや競合関係を発見しやすくなります。
+  </p>
+
+  <p>
+    また、AIに「特許本文に書かれている事実」と
+    「AIによる分析・推論」を分けるよう指示しておくと、
+    過度な推測を抑えやすくなります。
+  </p>
+
+</section>
+
+</main>
+
+
+<footer>
+  Notion特許情報・分析プロンプト集
+</footer>
+
+
+<script>
+
+function copyPrompt(id, button) {
+
+  const text = document.getElementById(id).innerText;
+
+  navigator.clipboard.writeText(text)
+    .then(function() {
+
+      const originalText = button.innerText;
+
+      button.innerText = "コピーしました！";
+      button.classList.add("copied");
+
+      setTimeout(function() {
+        button.innerText = originalText;
+        button.classList.remove("copied");
+      }, 1500);
+
+    })
+    .catch(function() {
+
+      alert("コピーできませんでした。テキストを手動でコピーしてください。");
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
