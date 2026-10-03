@@ -55,5 +55,16 @@
       "AI"
     ],
     "summary": "Grok botとNotionをつなげる"
+  },
+  {
+    "id": "patent_analyze_prompt_20261003",
+    "title": "特許分析用プロンプト",
+    "file": "patent_analyze_prompt_20261003.html",
+    "date": "2026-10-02",
+    "tags": [
+      "プロンプト",
+      "AI"
+    ],
+    "summary": "特許分析用プロンプト"
   }
 ]
