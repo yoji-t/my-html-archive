@@ -88,5 +88,16 @@
       "Notion"
     ],
     "summary": "Gyazoの画像をNotionに"
+  },
+   {
+    "id": "ai_patent_jpo_cases",
+    "title": "AI関連発明審査事例",
+    "file": "ai_patent_jpo_cases.html",
+    "date": "2026-10-04",
+    "tags": [
+      "Gyazo",
+      "Notion"
+    ],
+    "summary": "AI関連発明審査事例"
   }
 ]
