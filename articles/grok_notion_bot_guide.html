@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notionの情報をGrok Botに参照させる方法</title>
+<style>
+  :root {
+    --bg:#f5f7fb; --card:#fff; --text:#172033; --muted:#667085;
+    --line:#e5e7eb; --accent:#635bff; --accent2:#eef2ff;
+    --ok:#087443; --okbg:#ecfdf3; --warn:#9a6700; --warnbg:#fff8e1;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;line-height:1.8}
+  .wrap{max-width:920px;margin:auto;padding:28px 18px 60px}
+  .hero{background:linear-gradient(135deg,#171b2e,#4b4a8a);color:#fff;border-radius:24px;padding:34px 28px;margin-bottom:22px;box-shadow:0 12px 35px #18203a22}
+  .badge{display:inline-block;background:#ffffff22;border:1px solid #ffffff44;border-radius:999px;padding:4px 12px;font-size:13px}
+  h1{font-size:clamp(28px,5vw,44px);line-height:1.25;margin:14px 0 10px}
+  h2{font-size:24px;margin:0 0 16px}
+  h3{font-size:18px;margin:18px 0 8px}
+  p{margin:8px 0}
+  .lead{font-size:17px;color:#e8e9f5}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;margin:18px 0;box-shadow:0 5px 18px #10182808}
+  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:10px;align-items:center;margin:18px 0}
+  .node{background:var(--accent2);border-radius:15px;padding:18px 12px;text-align:center;font-weight:700}
+  .arrow{font-size:24px;color:var(--accent)}
+  .step{display:grid;grid-template-columns:48px 1fr;gap:15px;padding:18px 0;border-bottom:1px solid var(--line)}
+  .step:last-child{border-bottom:0}
+  .num{width:42px;height:42px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:800}
+  .note{background:var(--warnbg);border-left:5px solid #e2a400;padding:15px 17px;border-radius:10px;margin:16px 0}
+  .ok{background:var(--okbg);border-left:5px solid #12a15c;padding:15px 17px;border-radius:10px;margin:16px 0}
+  .prompt{background:#111827;color:#f9fafb;border-radius:13px;padding:17px;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px}
+  a{color:#4f46e5;font-weight:600}
+  ul{padding-left:22px}
+  .small{color:var(--muted);font-size:13px}
+  table{width:100%;border-collapse:collapse;margin-top:12px}
+  th,td{border-bottom:1px solid var(--line);padding:11px;text-align:left;vertical-align:top}
+  th{background:#f8fafc}
+  @media(max-width:700px){
+    .flow{grid-template-columns:1fr;}.arrow{transform:rotate(90deg);text-align:center}
+    .card{padding:19px}.hero{padding:28px 20px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section class="hero">
+  <span class="badge">2026年10月時点・公式情報ベース</span>
+  <h1>Notionの情報を<br>Grok Botに参照させる方法</h1>
+  <p class="lead">Notionを「自分専用の知識ベース」にして、Grokに質問するための初心者向けガイド。</p>
+</section>
+
+<section class="card">
+  <h2>まず結論</h2>
+  <p><strong>できます。</strong> Grokには「Connectors（コネクター）」があり、公式のコネクターカタログに<strong>Notion</strong>が掲載されています。Notionのページ、データベース、ワークスペースをGrokから参照できます。</p>
+  <div class="ok"><strong>ポイント：</strong> Notionの内容をGrokに「丸ごと学習させる」のではなく、質問に応じてNotionを検索・参照して回答させる仕組みです。</div>
+</section>
+
+<section class="card">
+  <h2>全体像</h2>
+  <div class="flow">
+    <div class="node">① Notion<br>情報を整理</div>
+    <div class="arrow">→</div>
+    <div class="node">② Grok<br>Notionを接続</div>
+    <div class="arrow">→</div>
+    <div class="node">③ Grok Bot<br>質問・回答</div>
+  </div>
+  <p class="small">公式ドキュメント：<a href="https://docs.x.ai/grok/connectors" target="_blank">Grok Connectors</a></p>
+</section>
+
+<section class="card">
+  <h2>STEP 1　Notion側を整理する</h2>
+  <p>まず、Grokに参照させたい情報をNotionに入れておきます。</p>
+  <ul>
+    <li>AIについて調べた記事・メモ</li>
+    <li>仕事のノウハウ</li>
+    <li>書籍の要約</li>
+    <li>自分で作った資料</li>
+    <li>アイデアや企画メモ</li>
+    <li>特許・技術情報</li>
+  </ul>
+  <p>最初から完璧に整理する必要はありません。ただし、ページのタイトルや見出しを分かりやすくしておくと、後から探しやすくなります。</p>
+</section>
+
+<section class="card">
+  <h2>STEP 2　GrokにNotionを接続する</h2>
+  <div class="step">
+    <div class="num">1</div>
+    <div><strong>Grokのコネクター画面を開く</strong><br>
+      <a href="https://grok.com/connectors" target="_blank">https://grok.com/connectors</a> を開きます。</div>
+  </div>
+  <div class="step">
+    <div class="num">2</div>
+    <div><strong>「New Connector」からNotionを探す</strong><br>
+      コネクター一覧・カタログから<strong>Notion</strong>を選択します。</div>
+  </div>
+  <div class="step">
+    <div class="num">3</div>
+    <div><strong>Notionアカウントで認証する</strong><br>
+      表示される認証画面でNotionへのアクセスを許可します。</div>
+  </div>
+  <div class="step">
+    <div class="num">4</div>
+    <div><strong>接続完了</strong><br>
+      接続後、Grokは質問に応じてNotionのデータを利用できるようになります。</div>
+  </div>
+  <div class="note"><strong>注意：</strong> Notionコネクターが表示される場所やボタン名は、Grokの画面・プラン・提供状況によって変わる可能性があります。公式ドキュメントでは、Notionはコネクターカタログの対象として案内されています。</div>
+</section>
+
+<section class="card">
+  <h2>STEP 3　まず普通のGrokでテストする</h2>
+  <p>いきなりBotを作るより、最初に接続が正常に動くか確認すると簡単です。</p>
+  <p>例えば、こんな質問をします。</p>
+  <div class="prompt">私のNotionに保存しているAI関連の情報を検索してください。
+特に「Grok」「AI Bot」「収益化」に関係する情報を整理して、
+・重要なポイント
+・具体例
+・情報の出典となったNotionページ
+をまとめてください。</div>
+  <p>Notionの情報を使った回答になっているか、元ページへのリンクや根拠を確認します。</p>
+</section>
+
+<section class="card">
+  <h2>STEP 4　Grok Botに役割を持たせる</h2>
+  <p>ここからが面白いところです。</p>
+  <p>Grok Botは、特定の仕事を継続して担当させるAIとして使えます。Botにはコネクターを利用させることができます。</p>
+  <p>例えば、こんなBotを作れます。</p>
+  <table>
+    <tr><th>Bot</th><th>役割</th></tr>
+    <tr><td>NotionリサーチBot</td><td>Notionに保存した情報を検索して要点をまとめる</td></tr>
+    <tr><td>自分専用ライターBot</td><td>Notionの過去記事・メモを参考に記事案を作る</td></tr>
+    <tr><td>アイデア整理Bot</td><td>Notionのアイデアを探して関連するものをまとめる</td></tr>
+    <tr><td>知識ベースBot</td><td>「自分のNotionにある情報」を優先して回答する</td></tr>
+  </table>
+</section>
+
+<section class="card">
+  <h2>STEP 5　Botの指示文を作る</h2>
+  <p>例えば、最初のBotには次のような指示を入れると分かりやすいです。</p>
+  <div class="prompt">あなたは私専用のNotion知識ベース・アシスタントです。
+
+【情報源】
+まず私のNotionを検索し、関連する情報がある場合はNotionの内容を優先してください。
+
+【回答ルール】
+・Notionに書かれている事実と、あなた自身の推測を区別する
+・Notionに情報がない場合は「Notion内に該当情報がありません」と明示する
+・可能なら参照したNotionページを示す
+・情報を勝手に事実として補完しない
+・複数のNotionページに情報がある場合は、それらを統合して整理する
+
+【回答形式】
+1. 結論
+2. Notionにある根拠
+3. 重要ポイント
+4. 不明点・不足情報</div>
+</section>
+
+<section class="card">
+  <h2>STEP 6　実際に質問してみる</h2>
+  <p>例えばこんな質問ができます。</p>
+  <div class="prompt">私のNotionに保存している情報をもとに、
+「Grok Botを使って収益化する方法」を整理してください。
+
+特に、
+・過去に保存した事例
+・使えそうなアイデア
+・自分の情報の中で関連性が高いもの
+をまとめてください。
+
+各項目について、可能なら参照元のNotionページも示してください。</div>
+  <p>こうすると、単なるWeb検索ではなく、<strong>「自分がNotionに蓄積してきた情報を使ってGrokに考えさせる」</strong>という使い方ができます。</p>
+</section>
+
+<section class="card">
+  <h2>「学習」と「参照」は違う</h2>
+  <table>
+    <tr><th>イメージ</th><th>実際の仕組み</th></tr>
+    <tr><td>NotionをGrokに学習させる</td><td>△ 正確にはこのイメージではない</td></tr>
+    <tr><td>NotionをGrokの知識源にする</td><td>○ コネクターで検索・参照する</td></tr>
+    <tr><td>Notionを更新したら、その情報を使う</td><td>○ 質問時に最新の情報を確認する使い方ができる</td></tr>
+  </table>
+  <p class="small">Grokの公式ドキュメントでは、コネクターは外部ツールやデータソースへ直接アクセスする仕組みとして説明されています。</p>
+</section>
+
+<section class="card">
+  <h2>おすすめの使い方</h2>
+  <p>もしNotionに大量の情報を貯めているなら、次の構成がかなり使いやすいです。</p>
+  <div class="flow">
+    <div class="node">Notion<br><small>自分の情報を蓄積</small></div>
+    <div class="arrow">→</div>
+    <div class="node">Grok<br><small>検索・整理・分析</small></div>
+    <div class="arrow">→</div>
+    <div class="node">Grok Bot<br><small>決まった役割で処理</small></div>
+  </div>
+  <p>さらに、うまくいった作業をGrok Botの「Skill」にして、繰り返し実行する仕組みもあります。公式ドキュメントでは、Skillを再利用可能な手順として保存し、Routineでスケジュール実行する機能も案内されています。</p>
+</section>
+
+<section class="card">
+  <h2>注意しておきたいこと</h2>
+  <ul>
+    <li><strong>権限：</strong> Notionのどの情報にアクセスできるか、接続時の権限を確認してください。</li>
+    <li><strong>重要情報：</strong> 機密情報を接続する場合は、アクセス範囲とプライバシー設定を確認してください。</li>
+    <li><strong>回答の根拠：</strong> 重要な内容では、参照したNotionページを示すようBotに指示すると確認しやすくなります。</li>
+    <li><strong>Botの記憶とは別物：</strong> Botが覚えている内容だけに頼らず、重要な情報は元のNotionを確認させるのがおすすめです。</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h2>公式情報</h2>
+  <ul>
+    <li><a href="https://docs.x.ai/grok/connectors" target="_blank">Grok Connectors</a> — Notionを含むコネクター一覧・接続方法</li>
+    <li><a href="https://grok.com/connectors" target="_blank">Grok Connectors</a> — コネクター管理画面</li>
+    <li><a href="https://docs.x.ai/grok-bot/get-started" target="_blank">Grok Bot Get started</a> — Botの作成・利用方法</li>
+    <li><a href="https://docs.x.ai/grok-bot/skills-routines-and-automations" target="_blank">Skills and routines</a> — 作業の再利用・自動化</li>
+  </ul>
+  <p class="small">内容は2026年10月3日時点で確認したxAI公式ドキュメントをもとに作成。</p>
+</section>
+
+</div>
+</body>
+</html>
