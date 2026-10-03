@@ -44,5 +44,16 @@
       "AI"
     ],
     "summary": "Grok bot収益化事例"
+  },
+   {
+    "id": "grok_notion_bot_guide",
+    "title": "Grok botとNotionをつなげる",
+    "file": "grok_notion_bot_guide.html",
+    "date": "2026-10-02",
+    "tags": [
+      "Grokbot",
+      "AI"
+    ],
+    "summary": "Grok botとNotionをつなげる"
   }
 ]
