@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>特許庁・AI関連発明の審査事例まとめ</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#5f6b7a;--line:#dfe5ee;--accent:#2457d6;--accent2:#eaf0ff;--good:#147a52;--warn:#9a5b00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;line-height:1.8}
+.container{max-width:1050px;margin:auto;padding:32px 20px 70px}
+.hero{background:linear-gradient(135deg,#14264a,#2e5ed7);color:#fff;border-radius:22px;padding:38px 34px;margin-bottom:24px;box-shadow:0 12px 35px #17203322}
+.hero h1{margin:0 0 12px;font-size:clamp(28px,4vw,42px);line-height:1.3}
+.hero p{margin:0;color:#e9efff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:25px;margin:18px 0;box-shadow:0 5px 18px #1720330b}
+h2{font-size:25px;margin:0 0 14px}
+h3{font-size:19px;margin:20px 0 8px}
+.badge{display:inline-block;background:var(--accent2);color:var(--accent);font-weight:700;border-radius:999px;padding:4px 11px;font-size:13px;margin:3px 4px 3px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.mini{border:1px solid var(--line);border-radius:13px;padding:17px;background:#fbfcff}
+.mini strong{display:block;font-size:17px;margin-bottom:6px}
+.flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:15px}
+.flow div{background:#f8faff;border:1px solid #d8e2ff;border-radius:12px;padding:16px}
+.flow b{color:var(--accent)}
+.case{border-left:5px solid var(--accent);padding:15px 18px;margin:14px 0;background:#fbfcff;border-radius:0 12px 12px 0}
+.case h3{margin:0 0 7px}
+.good{color:var(--good);font-weight:700}
+.warn{color:var(--warn);font-weight:700}
+table{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+th,td{border:1px solid var(--line);padding:10px;vertical-align:top}
+th{background:#f1f4f9;text-align:left}
+.note{background:#fff8e8;border:1px solid #f0d59a;border-radius:12px;padding:15px 17px}
+.footer{color:var(--muted);font-size:13px;margin-top:25px}
+a{color:var(--accent)}
+ul{padding-left:1.3em}
+</style>
+</head>
+<body>
+<div class="container">
+
+<section class="hero">
+  <h1>特許庁が示す<br>AI関連発明の審査事例</h1>
+  <p>「発明該当性」「新規性・進歩性」「記載要件」を、具体的な事例から理解するための実務向けまとめ</p>
+</section>
+
+<div class="card">
+<h2>まず結論</h2>
+<p>特許庁は、AIだから特別扱いするのではなく、基本的には通常の特許審査の考え方をAI関連発明にも適用しています。一方で、AI特有の論点が生じやすいため、具体的な審査事例を多数公表しています。</p>
+<div class="flow">
+<div><b>① 発明該当性</b><br>そもそも「特許法上の発明」といえるか？</div>
+<div><b>② 新規性</b><br>同じ発明が既に公知ではないか？</div>
+<div><b>③ 進歩性</b><br>公知技術から容易に想到できないか？</div>
+<div><b>④ 記載要件</b><br>明細書で、当業者が実施でき、請求項を十分に裏付けているか？</div>
+</div>
+</div>
+
+<div class="card">
+<h2>特許庁が公表したAI審査事例の全体像</h2>
+<p>特許庁は、2017年に5事例、2019年に10事例、2024年3月にさらに10事例を追加しています。2024年の追加では、生成AI、学習済みモデル、教師データなど、近年のAI実務に近いテーマが明示的に取り上げられています。</p>
+<div class="grid">
+<div class="mini"><strong>2017年</strong><span class="badge">5事例</span><br>発明該当性・進歩性など</div>
+<div class="mini"><strong>2019年</strong><span class="badge">10事例</span><br>記載要件・進歩性など</div>
+<div class="mini"><strong>2024年</strong><span class="badge">10事例</span><br>生成AI・学習済みモデル・教師データ等</div>
+</div>
+</div>
+
+<div class="card">
+<h2>1．発明該当性</h2>
+<p><b>ポイント：</b>AIを使っているだけで「発明」になるわけではありません。情報処理が、コンピュータ等のハードウェア資源を用いて具体的に実現されているかなど、ソフトウェア関連発明の一般的な判断枠組みで検討されます。</p>
+
+<div class="case">
+<h3>2024年：教師データ及び教師データ用画像生成方法</h3>
+<span class="badge">附属書A 3・事例5</span>
+<p>教師データや教師データを生成する方法について、単なる情報の提示・抽象的な情報処理にとどまらず、コンピュータ等を利用した具体的な情報処理として構成されているかがポイントになります。</p>
+<p class="good">実務上の意味：AIの「入力データ」そのものを権利化したい場合、単なるデータの説明ではなく、技術的な構成との関係を明確にすることが重要です。</p>
+</div>
+
+<div class="case">
+<h3>2024年：宿泊施設の評判を分析するための学習済みモデル</h3>
+<span class="badge">附属書B 3.2 事例2-14'</span>
+<p>パラメータセットとして構成された学習済みモデルについて、どのようにコンピュータ上の情報処理として構成されているかが問題になります。</p>
+</div>
+
+<div class="case">
+<h3>2024年：「プログラム」か否かが問題となる学習済みモデル</h3>
+<span class="badge">附属書A 1・事例55</span>
+<p>「学習済みモデル」という表現だけでは、その請求項が何を対象としているのか不明確になる場合があります。明細書や図面、技術常識を考慮しても「プログラム」であることが明確か、という観点が重要です。</p>
+</div>
+</div>
+
+<div class="card">
+<h2>2．新規性</h2>
+<p>AI関連発明だからといって、新規性の判断方法が特別になるわけではありません。原則として、請求項に記載された発明の構成要件が、先行技術にすべて開示されているかを確認します。</p>
+<div class="note"><b>重要：</b>「AIを使っている」という一言だけでは新規性は生まれません。AIの構成、入力データ、処理、出力、用途、学習方法などの具体的な構成が重要です。</div>
+<p>特許庁の五庁比較資料では、AI関連発明の新規性についてEPOに事例がある一方、日本のAI審査事例集では、特に進歩性・記載要件・発明該当性の事例が中心となっています。</p>
+</div>
+
+<div class="card">
+<h2>3．進歩性</h2>
+<p>AI関連発明で特に実務上重要なのがここです。単に「既存の業務にAIを適用しただけ」では、進歩性が否定されやすい方向になります。一方、AIの適用によって予測困難な技術的効果が生じる場合や、学習データ・学習方法・モデル構成に技術的工夫がある場合には、進歩性が認められる可能性があります。</p>
+
+<div class="case">
+<h3>カスタマーセンター用回答自動生成装置</h3>
+<span class="badge">2024年追加・進歩性：事例37</span>
+<p>人間が行っていた業務を生成AI（大規模言語モデル）で自動化するタイプの発明。<b>「人間の業務を生成AIで単純にシステム化しただけではないか」</b>という観点が重要になります。</p>
+</div>
+
+<div class="case">
+<h3>大規模言語モデルに入力するためのプロンプト用文章生成方法</h3>
+<span class="badge">2024年追加・進歩性：事例38</span>
+<p>生成AIに入力するプロンプトを生成する技術。単なるプロンプトの工夫ではなく、技術的な処理としてどのように構成され、どのような効果につながるかが重要です。</p>
+</div>
+
+<div class="case">
+<h3>放射線画像の輝度調節に用いられる学習済みモデルの学習方法</h3>
+<span class="badge">2024年追加・進歩性：事例39</span>
+<p>学習用放射線画像と教師画像を用い、輝度調節パラメータを出力する学習モデルを訓練する事例です。損失関数を用いて、教師画像と輝度調節後画像の画素値の誤差を小さくするように学習します。</p>
+<p class="good">実務上の意味：単に「AIで画像処理する」ではなく、教師データ、目的変数、損失関数など、学習方法に具体的な技術的特徴を持たせることがポイントになります。</p>
+</div>
+
+<div class="case">
+<h3>レーザ加工装置</h3>
+<span class="badge">2024年追加・進歩性：事例40</span>
+<p>人間が行っていた作業をAI等でシステム化するタイプの事例。AIを利用したこと自体ではなく、引用発明から容易に想到できるか、具体的な技術的特徴や効果があるかが判断の中心になります。</p>
+</div>
+
+<h3>2019年から示されている典型的な4つの観点</h3>
+<table>
+<tr><th>観点</th><th>考え方</th></tr>
+<tr><td>単純なAI適用</td><td>既存技術にAIを適用しただけなら、進歩性が問題になりやすい。</td></tr>
+<tr><td>教師データの変更</td><td>教師データの構成変更に技術的意義があるかを見る。</td></tr>
+<tr><td>教師データの前処理</td><td>前処理が単なる周知技術の適用なのか、技術的特徴を生むのかを見る。</td></tr>
+<tr><td>学習方法</td><td>学習方法や損失関数などに具体的な工夫があるかを見る。</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h2>4．記載要件</h2>
+<p>AI特許で非常に重要なのが「AIがそれっぽい答えを出した」だけでは足りないという点です。特に、AIを使って未知の材料・物質・特性などを予測する発明では、明細書の裏付けが問題になります。</p>
+
+<div class="case">
+<h3>糖度推定システム</h3>
+<span class="badge">事例46</span>
+<p>教師データに含まれる複数種類のデータの間に、発明の効果につながる相関関係等が存在することを、明細書等で裏付けられているかが問題になります。</p>
+<p class="warn">ポイント：AIに入力するデータ同士の関係が全く説明できない場合、サポート要件・実施可能要件が問題になり得ます。</p>
+</div>
+
+<div class="case">
+<h3>事業計画支援装置／自動運転車両／体重推定システム／被験物質のアレルギー発症率を予測する方法</h3>
+<span class="badge">事例47～50</span>
+<p>これらは、複数種類のデータ間に具体的な相関関係が明細書に詳しく書かれていなくても、<b>出願時の技術常識から相関関係の存在を推認できる</b>場合を示す事例群です。</p>
+</div>
+
+<div class="case">
+<h3>嫌気性接着剤組成物</h3>
+<span class="badge">事例51</span>
+<p>AIによって「ある機能を持つ」と推定された物の発明。AIの推定結果だけで、実際の物を製造して評価した実施例の代替になるとは限りません。</p>
+<p class="warn">ポイント：AIによる予測結果を、実施例・実験結果にどこまで代替できるかが重要な論点です。</p>
+</div>
+
+<div class="case">
+<h3>蛍光発光性化合物</h3>
+<span class="badge">2024年追加・事例52</span>
+<p>マテリアルズ・インフォマティクスの代表的なケース。AIによって特定の機能を持つと推定された物質について、実施可能要件・サポート要件が問題になります。</p>
+</div>
+
+<div class="case">
+<h3>教師データ用画像生成方法</h3>
+<span class="badge">2024年追加・事例53</span>
+<p>教師データをどのように生成するかについて、請求項に記載された範囲を明細書が十分に支えているかがポイントです。</p>
+</div>
+
+<div class="case">
+<h3>ネジ締付品質の機械学習装置</h3>
+<span class="badge">2024年追加・事例54</span>
+<p>教師データに含まれる複数種類のデータについて、入出力関係が不明な場合と、明確な場合を比較する事例です。</p>
+</div>
+</div>
+
+<div class="card">
+<h2>実務での読み方：AI特許は「AI」ではなく技術的構成を見る</h2>
+<div class="grid">
+<div class="mini"><strong>入力</strong>画像、センサ値、文章、材料データなど、何をAIへ入力するのか。</div>
+<div class="mini"><strong>処理</strong>前処理、特徴量、モデル、学習方法、損失関数などに特徴があるか。</div>
+<div class="mini"><strong>出力</strong>何を推定・生成・制御するのか。技術的意味はあるか。</div>
+<div class="mini"><strong>効果</strong>精度向上、省エネ、品質向上など、技術的効果が説明できるか。</div>
+<div class="mini"><strong>データ</strong>教師データの構成やデータ間の関係が説明できるか。</div>
+<div class="mini"><strong>裏付け</strong>実施例、実験結果、技術常識などで請求範囲を支えられるか。</div>
+</div>
+</div>
+
+<div class="card">
+<h2>AI特許のチェックリスト</h2>
+<ul>
+<li>「AIを使う」以外に、技術的な構成を説明できるか。</li>
+<li>入力データと出力データの関係を説明できるか。</li>
+<li>教師データの構成に技術的意味があるか。</li>
+<li>学習方法、モデル構成、損失関数、前処理などに特徴があるか。</li>
+<li>AIを適用したことによる予測困難な技術的効果があるか。</li>
+<li>請求項で広く権利化した範囲を、明細書の実施例等で十分に支えられているか。</li>
+<li>AIの予測結果だけに依存せず、必要に応じて実験・評価結果を示しているか。</li>
+<li>「学習済みモデル」「モデル」「パラメータセット」などの用語が、請求項上明確か。</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>特許庁資料</h2>
+<ul>
+<li>特許庁「AI関連技術に関する特許審査の事例について」</li>
+<li>特許庁「AI関連技術に関する事例について（事例全文）」</li>
+<li>特許庁「AI関連技術に関する審査事例の追加について（2024年3月）」</li>
+<li>特許庁「特許・実用新案審査ハンドブック」</li>
+</ul>
+<p>本ページは特許庁公表資料を読みやすく整理した解説であり、法的助言ではありません。実際の出願・権利化では、最新の審査基準・審査ハンドブックを確認してください。</p>
+</div>
+
+<div class="footer">
+出典：特許庁「AI関連技術に関する特許審査の事例について」（2024年3月追加を含む）、特許・実用新案審査ハンドブック等。最終確認日：2026年10月4日。
+</div>
+
+</div>
+</body>
+</html>
