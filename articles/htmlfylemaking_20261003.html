@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>スマホだけでHTMLファイルを作る無料サービス</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Hiragino Kaku Gothic ProN",
+        "Hiragino Sans",
+        "Yu Gothic",
+        Meiryo,
+        sans-serif;
+      background: #f5f7fb;
+      color: #222;
+      line-height: 1.8;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 18px 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: white;
+      border-radius: 22px;
+      padding: 36px 28px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: 28px;
+      line-height: 1.4;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 16px;
+      opacity: 0.95;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .recommended {
+      border: 2px solid #2563eb;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #2563eb;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin: 5px 0 15px;
+      color: #111827;
+    }
+
+    h3 {
+      font-size: 19px;
+      margin: 0 0 10px;
+      color: #1f2937;
+    }
+
+    .steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 20px 0 0;
+    }
+
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 15px 15px 15px 55px;
+      margin-bottom: 10px;
+      background: #f8fafc;
+      border-radius: 12px;
+    }
+
+    .steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 15px;
+      top: 13px;
+      width: 28px;
+      height: 28px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .service {
+      border-left: 5px solid #e5e7eb;
+      padding: 18px 20px;
+      margin: 15px 0;
+      background: #fafafa;
+      border-radius: 0 12px 12px 0;
+    }
+
+    .service strong {
+      font-size: 18px;
+    }
+
+    .service a {
+      display: inline-block;
+      margin-top: 8px;
+      color: #2563eb;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .service a:hover {
+      text-decoration: underline;
+    }
+
+    .point {
+      background: #eff6ff;
+      border-radius: 14px;
+      padding: 18px;
+      margin-top: 15px;
+    }
+
+    .point strong {
+      color: #1d4ed8;
+    }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin: 25px 0 10px;
+    }
+
+    .flow-item {
+      background: #eef2ff;
+      color: #3730a3;
+      padding: 12px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .arrow {
+      font-size: 22px;
+      color: #64748b;
+    }
+
+    footer {
+      text-align: center;
+      color: #64748b;
+      font-size: 13px;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px 12px 40px;
+      }
+
+      .hero {
+        padding: 28px 20px;
+        border-radius: 18px;
+      }
+
+      .hero h1 {
+        font-size: 23px;
+      }
+
+      .card {
+        padding: 20px 17px;
+        border-radius: 15px;
+      }
+
+      .flow {
+        flex-direction: column;
+      }
+
+      .arrow {
+        transform: rotate(90deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <section class="hero">
+      <h1>📱 スマートフォンだけで<br>HTMLファイルを作る方法</h1>
+      <p>
+        ChatGPTで作ったHTMLコードをコピーして、
+        無料サービスを使ってHTMLファイルとして保存できます。
+      </p>
+    </section>
+
+    <section class="card recommended">
+      <span class="badge">おすすめ</span>
+
+      <h2>Ideluma HTML Editor</h2>
+
+      <p>
+        スマートフォンのブラウザから利用できる、
+        シンプルなHTMLエディタです。
+      </p>
+
+      <p>
+        HTMLコードを貼り付けて、プレビューを確認し、
+        HTMLファイルとしてダウンロードできます。
+      </p>
+
+      <a
+        href="https://ideluma.com/html-editor/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        → Ideluma HTML Editorを開く
+      </a>
+
+      <h3 style="margin-top:25px;">使い方</h3>
+
+      <ol class="steps">
+        <li>ChatGPTでHTMLコードを作成する</li>
+        <li>HTMLコードをコピーする</li>
+        <li>Idelumaをスマートフォンで開く</li>
+        <li>HTML欄にコードを貼り付ける</li>
+        <li>プレビューで表示を確認する</li>
+        <li>Downloadを押してHTMLファイルを保存する</li>
+      </ol>
+    </section>
+
+    <section class="card">
+
+      <h2>🔧 その他の無料サービス</h2>
+
+      <div class="service">
+        <strong>CodePractice HTML/CSS/JS Playground</strong>
+        <p>
+          HTML・CSS・JavaScriptをまとめて編集できる
+          オンラインエディタです。
+        </p>
+
+        <a
+          href="https://codepractice.in/tools/html-css-js-playground"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          → CodePracticeを開く
+        </a>
+      </div>
+
+      <div class="service">
+        <strong>HTML Viewer</strong>
+        <p>
+          HTMLコードを貼り付けてプレビューし、
+          HTMLファイルとしてExportできます。
+        </p>
+
+        <a
+          href="https://htmlviewer.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          → HTML Viewerを開く
+        </a>
+      </div>
+
+      <div class="service">
+        <strong>HTML Code Runner</strong>
+        <p>
+          ブラウザ上でHTMLを実行・確認し、
+          HTMLファイルとしてダウンロードできます。
+        </p>
+
+        <a
+          href="https://htmlcoderunner.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          → HTML Code Runnerを開く
+        </a>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>💡 いちばん簡単な流れ</h2>
+
+      <div class="flow">
+        <div class="flow-item">ChatGPT</div>
+        <div class="arrow">→</div>
+        <div class="flow-item">HTMLコードをコピー</div>
+        <div class="arrow">→</div>
+        <div class="flow-item">HTMLエディタ</div>
+        <div class="arrow">→</div>
+        <div class="flow-item">Download</div>
+        <div class="arrow">→</div>
+        <div class="flow-item">.htmlファイル完成！</div>
+      </div>
+
+    </section>
+
+    <section class="card">
+
+      <h2>📌 ポイント</h2>
+
+      <div class="point">
+        <strong>スマートフォンだけで完結できます。</strong><br>
+        パソコンを使わなくても、HTMLコードをファイル化できます。
+      </div>
+
+      <div class="point">
+        <strong>基本的には無料で利用できます。</strong><br>
+        サービスによって仕様や利用条件が変わる場合があるため、
+        実際に利用するときは各サービスの最新情報を確認してください。
+      </div>
+
+      <div class="point">
+        <strong>ChatGPTとの相性が良い使い方です。</strong><br>
+        「HTMLを作る → コピー → エディタに貼る → ダウンロード」
+        という流れにすると、スマホでも簡単にWebページを作れます。
+      </div>
+
+    </section>
+
+    <footer>
+      HTMLファイル作成ガイド
+    </footer>
+
+  </div>
+
+</body>
+</html>
