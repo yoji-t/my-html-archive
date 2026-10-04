@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>特許情報をNotionに格納してNotion AIで解析する活用事例</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+      line-height: 1.8;
+      color: #333;
+      background: #f7f7f5;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 40px 50px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      border-radius: 12px;
+    }
+
+    h1 {
+      font-size: 30px;
+      line-height: 1.4;
+      border-bottom: 3px solid #222;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 24px;
+      margin-top: 45px;
+      padding-left: 12px;
+      border-left: 5px solid #555;
+    }
+
+    h3 {
+      font-size: 20px;
+      margin-top: 30px;
+    }
+
+    p {
+      margin: 15px 0;
+    }
+
+    a {
+      color: #1769aa;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .summary {
+      background: #f1f3f5;
+      border-left: 5px solid #555;
+      padding: 20px;
+      margin: 25px 0;
+      border-radius: 6px;
+    }
+
+    .important {
+      background: #fff8dc;
+      border: 1px solid #eadb91;
+      padding: 20px;
+      margin: 25px 0;
+      border-radius: 6px;
+    }
+
+    .example {
+      background: #f8f9fa;
+      border: 1px solid #ddd;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+
+    pre {
+      background: #1e1e1e;
+      color: #f5f5f5;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    code {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+      font-size: 15px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f0f0ee;
+    }
+
+    tr:nth-child(even) {
+      background: #fafafa;
+    }
+
+    .stars {
+      white-space: nowrap;
+      font-weight: bold;
+    }
+
+    ul {
+      padding-left: 25px;
+    }
+
+    li {
+      margin: 8px 0;
+    }
+
+    .conclusion {
+      background: #eef7ee;
+      border: 1px solid #b9d8b9;
+      padding: 25px;
+      margin-top: 35px;
+      border-radius: 8px;
+    }
+
+    .footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #ddd;
+      color: #777;
+      font-size: 13px;
+    }
+
+    @media (max-width: 700px) {
+      .container {
+        margin: 0;
+        padding: 25px 20px;
+        border-radius: 0;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      h2 {
+        font-size: 21px;
+      }
+
+      table {
+        font-size: 13px;
+      }
+
+      th, td {
+        padding: 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>
+    特許情報をNotionに格納して<br>
+    Notion AIで解析する活用事例
+  </h1>
+
+  <div class="summary">
+    <strong>結論：</strong>
+    特許情報をNotionに蓄積し、それをNotion AIで横断的に分析するという使い方は、
+    すでに公開されている「特許をAIで分析する事例」や「NotionのデータベースをAIで分析する機能」と
+    非常に相性がよい。
+  </div>
+
+  <h2>1. 特許 × Notion AIに近い公開事例</h2>
+
+  <h3>Academic Labs：複数の特許をAIで詳細分析</h3>
+
+  <p>
+    特許をAIに読み込ませ、複数の特許を比較・分析する用途を紹介している事例があります。
+  </p>
+
+  <p>
+    <a href="https://academiclabscom.notion.site/AI-v3-analyse-up-to-4-patents-in-depth-with-AI-1c9713804a6480e69ddbcc6f1ced865e"
+       target="_blank">
+      AI v3 – analyse up to 4 patents in-depth with AI
+    </a>
+  </p>
+
+  <p>
+    この事例では、特許について以下のような情報をAI分析の対象としています。
+  </p>
+
+  <ul>
+    <li>特許タイトル</li>
+    <li>要約</li>
+    <li>請求項</li>
+    <li>特許全文</li>
+    <li>出願人</li>
+    <li>権利者</li>
+    <li>発明者</li>
+    <li>公開日</li>
+  </ul>
+
+  <p>
+    さらに、以下のような分析が想定されています。
+  </p>
+
+  <ul>
+    <li>特許の請求項を理解する</li>
+    <li>特許の重要なポイントを抽出する</li>
+    <li>複数の特許の請求項を比較する</li>
+    <li>特許間の違いを整理する</li>
+    <li>自社のイノベーションを阻害する可能性のある特許リスクを検討する</li>
+  </ul>
+
+  <div class="important">
+    <strong>ポイント：</strong>
+    「特許文献をデータとして蓄積し、AIに横断分析させる」という考え方自体は、
+    すでに公開されている活用事例と一致しています。
+  </div>
+
+
+  <h2>2. Notion公式：Notion AIでデータベースを分析できる</h2>
+
+  <p>
+    特許専用の機能ではありませんが、Notion公式の
+    <strong>Research Mode</strong> は今回の用途に非常に重要です。
+  </p>
+
+  <p>
+    <a href="https://www.notion.com/ja/help/research-mode"
+       target="_blank">
+      Notion AI「リサーチモード」公式ヘルプ
+    </a>
+  </p>
+
+  <p>
+    Notion AIでは、ワークスペース内の情報やデータベースなどを対象として、
+    情報を検索・収集し、その内容をもとに回答やレポートを生成することができます。
+  </p>
+
+  <p>
+    そのため、例えばNotionに以下のような特許データベースを作成できます。
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>項目</th>
+        <th>内容</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>公開番号</td>
+        <td>JP、WO、US、CNなど</td>
+      </tr>
+      <tr>
+        <td>出願人</td>
+        <td>企業・大学・研究機関など</td>
+      </tr>
+      <tr>
+        <td>発明名称</td>
+        <td>特許の名称</td>
+      </tr>
+      <tr>
+        <td>要約</td>
+        <td>Abstract</td>
+      </tr>
+      <tr>
+        <td>課題</td>
+        <td>発明が解決しようとする課題</td>
+      </tr>
+      <tr>
+        <td>解決手段</td>
+        <td>発明の構成・技術的手段</td>
+      </tr>
+      <tr>
+        <td>効果</td>
+        <td>発明によって得られる効果</td>
+      </tr>
+      <tr>
+        <td>独立請求項</td>
+        <td>主要な権利範囲</td>
+      </tr>
+      <tr>
+        <td>IPC / CPC</td>
+        <td>技術分類</td>
+      </tr>
+      <tr>
+        <td>自社分析</td>
+        <td>自社技術との関係</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <h2>3. Notion AIで想定できる特許分析</h2>
+
+  <p>
+    上記のようなデータベースを作っておけば、Notion AIに自然言語で質問できます。
+  </p>
+
+  <div class="example">
+
+    <h3>競合分析</h3>
+
+    <pre><code>このデータベースに登録された特許を分析して、
+競合A社の技術開発・特許出願戦略を整理してください。</code></pre>
+
+  </div>
+
+  <div class="example">
+
+    <h3>技術分類</h3>
+
+    <pre><code>B60Cに分類された特許を、
+技術的な課題ごとに分類してください。</code></pre>
+
+  </div>
+
+  <div class="example">
+
+    <h3>技術トレンド分析</h3>
+
+    <pre><code>2024年～2026年に出願された特許を分析して、
+今後重要になりそうなタイヤ技術を抽出してください。</code></pre>
+
+  </div>
+
+  <div class="example">
+
+    <h3>自社技術との比較</h3>
+
+    <pre><code>自社の○○技術と競合各社の特許について、
+共通する構成と相違する構成を比較してください。</code></pre>
+
+  </div>
+
+
+  <h2>4. Notion AIそのものにも特許がある</h2>
+
+  <p>
+    興味深いことに、Notion AIの情報検索・Q&Aの仕組みそのものについても
+    特許が存在します。
+  </p>
+
+  <p>
+    弁理士・知財関係者による解説として、以下の記事があります。
+  </p>
+
+  <p>
+    <a href="https://www.evorix.jp/blog/notion-ai-qa-assistant-patent-us12688361"
+       target="_blank">
+      Notion AIの中核特許を弁理士が解説
+    </a>
+  </p>
+
+  <p>
+    対象として紹介されているのは、
+    <strong>US 12,688,361</strong>
+    「Machine learning based question and answer (Q and A) assistant」
+    です。
+  </p>
+
+  <p>
+    これは、自然言語で質問するとワークスペース内の関連情報を参照して回答するという、
+    Notion AIの重要な考え方を理解するうえでも参考になります。
+  </p>
+
+
+  <h2>5. Notion AI × 特許情報という考え方</h2>
+
+  <p>
+    特許業務に応用する場合、次のような構造にすると非常に使いやすくなります。
+  </p>
+
+  <pre><code>特許データベース
+│
+├─ 基本情報
+│   ├─ 公開番号
+│   ├─ 出願人
+│   ├─ 発明者
+│   ├─ 公開日
+│   └─ IPC / CPC
+│
+├─ 技術情報
+│   ├─ 発明名称
+│   ├─ 要約
+│   ├─ 課題
+│   ├─ 解決手段
+│   ├─ 効果
+│   └─ 技術分類
+│
+├─ 権利情報
+│   ├─ 独立請求項
+│   ├─ 従属請求項
+│   └─ 権利化状況
+│
+└─ 自社分析
+    ├─ 自社技術との関係
+    ├─ 競合との関係
+    ├─ 類似度
+    ├─ 注目度
+    └─ 知財担当者コメント</code></pre>
+
+
+  <h2>6. 特許調査業務との組み合わせ</h2>
+
+  <p>
+    特許調査システムとNotionを組み合わせると、さらに面白い運用ができます。
+  </p>
+
+  <div class="example">
+
+    <h3>ステップ1：特許検索</h3>
+    <p>
+      Shareresearch、PatentScope、Google Patentsなどで対象特許を検索する。
+    </p>
+
+    <h3>ステップ2：重要特許をNotionへ登録</h3>
+    <p>
+      公開番号、出願人、要約、請求項、IPCなどをNotionデータベースに保存する。
+    </p>
+
+    <h3>ステップ3：人間による一次分析</h3>
+    <p>
+      知財担当者が重要度、技術分類、自社技術との関係などを付与する。
+    </p>
+
+    <h3>ステップ4：Notion AIで横断分析</h3>
+    <p>
+      複数の特許をまとめてAIに分析させる。
+    </p>
+
+    <h3>ステップ5：定期的に更新</h3>
+    <p>
+      新しい特許を追加し、技術トレンドや競合企業の出願状況を継続的に分析する。
+    </p>
+
+  </div>
+
+
+  <h2>7. 公開されている情報を重要度で整理</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>サイト・情報</th>
+        <th>特許 × Notion AIとの近さ</th>
+        <th>内容</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>Academic Labs / Notion</td>
+        <td class="stars">★★★★★</td>
+        <td>複数の特許をAIで比較・分析</td>
+      </tr>
+
+      <tr>
+        <td>Notion公式 Research Mode</td>
+        <td class="stars">★★★★☆</td>
+        <td>Notion内のデータベース等をAIで検索・分析</td>
+      </tr>
+
+      <tr>
+        <td>Evorix</td>
+        <td class="stars">★★★☆☆</td>
+        <td>Notion AIそのものの特許を分析</td>
+      </tr>
+
+      <tr>
+        <td>Notion公式 Enterprise Search</td>
+        <td class="stars">★★★☆☆</td>
+        <td>ワークスペースや接続サービスの情報をAI検索</td>
+      </tr>
+
+      <tr>
+        <td>NotionのAI関連特許</td>
+        <td class="stars">★★☆☆☆</td>
+        <td>Notion AIの技術的背景を理解する材料</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <h2>8. 現時点での結論</h2>
+
+  <div class="conclusion">
+
+    <p>
+      <strong>
+        「特許情報をNotionに蓄積し、Notion AIで横断分析する」
+      </strong>
+      という考え方は、十分に現実的です。
+    </p>
+
+    <p>
+      一方で、
+      <strong>
+        「日本企業の知財部が、実際にNotionを特許データベースとして運用し、
+        Notion AIで特許ランドスケープを分析している」
+      </strong>
+      という詳細な公開事例は、現時点ではまだ多くありません。
+    </p>
+
+    <p>
+      その意味では、まだ比較的新しい活用方法だと考えられます。
+    </p>
+
+    <p>
+      特に、
+      <strong>
+        「特許検索システムで検索 → 重要特許をNotionに蓄積 → Notion AIで横断分析」
+      </strong>
+      という運用は、知財部門の情報整理・分析業務とかなり相性が良いと考えられます。
+    </p>
+
+  </div>
+
+
+  <h2>9. 知財担当者にとって特に面白い使い方</h2>
+
+  <p>
+    特許情報をNotionに蓄積していくと、単なる「特許メモ」ではなく、
+    <strong>自社専用の特許ナレッジベース</strong>として利用できます。
+  </p>
+
+  <ul>
+    <li>競合企業ごとの特許ポートフォリオ分析</li>
+    <li>IPCごとの技術動向分析</li>
+    <li>出願年ごとの技術トレンド分析</li>
+    <li>競合企業間の技術領域比較</li>
+    <li>自社技術と競合特許の比較</li>
+    <li>重要特許の要約</li>
+    <li>請求項の比較</li>
+    <li>類似技術のグループ化</li>
+    <li>技術課題ごとの特許分類</li>
+    <li>新しい技術領域の発見</li>
+  </ul>
+
+  <div class="important">
+    <strong>注意：</strong>
+    Notion AIによる分析結果は、特許性判断、侵害判断、FTO判断などの最終結論として
+    そのまま利用するのではなく、知財担当者による確認を前提とするのが安全です。
+  </div>
+
+
+  <div class="footer">
+    <p>
+      本ページは「特許情報 × Notion × Notion AI」の活用可能性を整理したものです。
+    </p>
+
+    <p>
+      参考：
+      <a href="https://academiclabscom.notion.site/AI-v3-analyse-up-to-4-patents-in-depth-with-AI-1c9713804a6480e69ddbcc6f1ced865e"
+         target="_blank">
+        Academic Labs / AI v3
+      </a>
+      ／
+      <a href="https://www.notion.com/ja/help/research-mode"
+         target="_blank">
+        Notion公式 Research Mode
+      </a>
+      ／
+      <a href="https://www.evorix.jp/blog/notion-ai-qa-assistant-patent-us12688361"
+         target="_blank">
+        Evorix / Notion AI特許解説
+      </a>
+    </p>
+  </div>
+
+</div>
+
+</body>
+</html>
