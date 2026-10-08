@@ -1,0 +1,407 @@
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneDrive＋Copilotによる特許ポートフォリオ存廃判断</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                   "Yu Gothic", Meiryo, sans-serif;
+      line-height: 1.8;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px 20px;
+      background: #fff;
+    }
+
+    h1 {
+      font-size: 28px;
+      border-bottom: 3px solid #333;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 22px;
+      margin-top: 40px;
+      padding-left: 12px;
+      border-left: 5px solid #555;
+    }
+
+    h3 {
+      font-size: 18px;
+      margin-top: 30px;
+    }
+
+    p {
+      margin: 15px 0;
+    }
+
+    ul {
+      padding-left: 25px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .highlight {
+      background: #f5f5f5;
+      border-left: 5px solid #777;
+      padding: 15px 20px;
+      margin: 25px 0;
+    }
+
+    .example {
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 15px 20px;
+      margin: 20px 0;
+      white-space: pre-line;
+    }
+
+    pre {
+      background: #f5f5f5;
+      padding: 20px;
+      overflow-x: auto;
+      border-radius: 6px;
+      line-height: 1.6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0;
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #f2f2f2;
+    }
+
+    .conclusion {
+      background: #f3f6f8;
+      border: 1px solid #ccc;
+      padding: 20px;
+      margin-top: 35px;
+    }
+
+    .source {
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>OneDrive＋Copilotで自社特許の存廃判断を支援する</h1>
+
+  <p>
+    自社が保有する特許をOneDriveにまとめて保存し、
+    Microsoft Copilotから参照できるようにすれば、
+    特許の存続・放棄（存廃）を判断する際に、
+    「その特許だけ」ではなく「周辺の自社特許との関係」まで考慮した分析ができるのではないか。
+  </p>
+
+  <p>
+    この考え方は、実は現在のAIを利用した特許ポートフォリオ管理の方向性とかなり近いものです。
+  </p>
+
+
+  <h2>1．実際に「関連特許を考慮して維持判断」する仕組みがある</h2>
+
+  <p>
+    2026年公開の日本特許
+    <strong>JP2026074326</strong>
+    には、ある特許の維持年金を支払うかどうか判断する際に、
+    その特許に関連する他の特許を考慮する仕組みが記載されています。
+  </p>
+
+  <ul>
+    <li>対象特許に関連する他の特許を特定する</li>
+    <li>関連特許の存続状況を取得する</li>
+    <li>関連特許が存続しているかどうかを考慮する</li>
+    <li>必要に応じて関連特許の価値情報を参照する</li>
+    <li>これらの情報を特許維持判断に利用する</li>
+  </ul>
+
+  <div class="highlight">
+    <strong>重要なポイント：</strong><br>
+    「この特許単体に価値があるか」だけではなく、
+    「この特許を中心としたポートフォリオ全体として、残す意味があるか」
+    を評価する考え方です。
+  </div>
+
+  <p>
+    これは、OneDriveに自社特許を蓄積してCopilotに分析させるというアイデアと非常に近い発想です。
+  </p>
+
+
+  <h2>2．AIによる「維持／放棄」の判断支援サービスも登場している</h2>
+
+  <p>
+    海外では、AIを利用して特許ポートフォリオを分析し、
+    「維持すべき特許」と「放棄候補」を抽出するサービスも登場しています。
+  </p>
+
+  <h3>AI-driven Patent Pruning</h3>
+
+  <p>
+    Solve Intelligenceなどでは、特許ポートフォリオを分析し、
+    特許の価値や事業との関連性などを考慮して、
+    特許の維持・整理を支援する仕組みが提供されています。
+  </p>
+
+  <ul>
+    <li>高価値特許の抽出</li>
+    <li>放棄候補特許の抽出</li>
+    <li>クレームの強さの評価</li>
+    <li>商業的関連性の評価</li>
+    <li>競合に対するカバレッジの評価</li>
+    <li>維持コストの考慮</li>
+    <li>残存期間の考慮</li>
+  </ul>
+
+  <p>
+    また、Patlyticsなどのサービスでも、
+    AIを利用して特許の戦略的価値を評価し、
+    維持、権利行使、ライセンス、放棄などの判断を支援しています。
+  </p>
+
+
+  <h2>3．AIによる特許年金の「払う／払わない」判断</h2>
+
+  <p>
+    特許年金管理の分野でも、
+    AIを利用して特許を更新するかどうかを判断する仕組みが研究・提案されています。
+  </p>
+
+  <p>
+    さらに近年の技術では、単純に特許そのものを見るだけではなく、
+    以下のような情報を組み合わせて判断する方向に進んでいます。
+  </p>
+
+  <ul>
+    <li>特許ポートフォリオ</li>
+    <li>維持コスト</li>
+    <li>予算</li>
+    <li>事業・製品との関係</li>
+    <li>市場要因</li>
+    <li>社内会議や担当者のコメント</li>
+    <li>将来のポートフォリオへの影響</li>
+  </ul>
+
+
+  <h2>4．OneDrive＋Copilotで同じ考え方を実現できる可能性</h2>
+
+  <p>
+    ここで面白いのが、
+    専用の特許管理システムを導入しなくても、
+    Microsoft 365の環境を利用して同様の分析基盤を作れる可能性があることです。
+  </p>
+
+  <p>例えば、OneDriveに自社特許をまとめて保存します。</p>
+
+  <pre>
+OneDrive
+│
+├─ 特許001.pdf
+├─ 特許002.pdf
+├─ 特許003.pdf
+├─ 特許004.pdf
+├─ 特許005.pdf
+├─ 特許006.pdf
+│
+└─ ……数千件
+  </pre>
+
+  <p>
+    そしてCopilotから、複数の特許文書を横断して分析させます。
+  </p>
+
+
+  <h2>5．例えば、こんな質問ができる</h2>
+
+  <div class="example">
+<strong>質問例1</strong>
+
+「特許001について、当社が保有する他の特許との技術的な重複・補完関係を調査してください。」
+  </div>
+
+  <div class="example">
+<strong>質問例2</strong>
+
+「特許001を放棄した場合、当社の特許ポートフォリオにどのようなカバレッジの穴が生じるか分析してください。」
+  </div>
+
+  <div class="example">
+<strong>質問例3</strong>
+
+「特許001を放棄した場合、同じ製品・技術をカバーする当社の他の特許で代替可能か分析してください。」
+  </div>
+
+  <div class="example">
+<strong>質問例4</strong>
+
+「特許001と技術的に近い当社保有特許を抽出し、それぞれのクレームのカバー範囲を比較してください。」
+  </div>
+
+
+  <h2>6．特許存廃判断の評価軸</h2>
+
+  <p>
+    単純に「この特許は重要ですか？」と質問するよりも、
+    あらかじめ評価軸を設定してCopilotに分析させる方が有効です。
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>評価区分</th>
+        <th>評価項目</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>① 単体価値</td>
+        <td>技術的重要性、製品との関係、将来技術との関係、クレームの強さ</td>
+      </tr>
+      <tr>
+        <td>② ポートフォリオ価値</td>
+        <td>類似特許、上位概念・下位概念、補完特許、同一製品をカバーする特許</td>
+      </tr>
+      <tr>
+        <td>③ 放棄リスク</td>
+        <td>カバレッジの穴、他社参入余地、権利行使可能性の低下</td>
+      </tr>
+      <tr>
+        <td>④ コスト</td>
+        <td>維持年金、各国の維持費、残存期間</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <h2>7．最終的な判定例</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>評価</th>
+        <th>判断</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A</td>
+        <td>積極的に維持</td>
+      </tr>
+      <tr>
+        <td>B</td>
+        <td>維持推奨</td>
+      </tr>
+      <tr>
+        <td>C</td>
+        <td>要検討</td>
+      </tr>
+      <tr>
+        <td>D</td>
+        <td>放棄候補</td>
+      </tr>
+      <tr>
+        <td>E</td>
+        <td>放棄推奨</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <h2>8．タイヤ特許で考えると特に面白い</h2>
+
+  <p>
+    例えば、タイヤメーカーが大量の自社特許をOneDriveに保存している場合、
+    次のような質問をCopilotに投げることが考えられます。
+  </p>
+
+  <div class="highlight">
+    <strong>実務向け質問例</strong>
+    <p>
+      「WO2026xxxxを放棄した場合、当社のタイヤ構造に関する特許ポートフォリオに
+      どのようなカバレッジギャップが発生するか分析してください。
+      他の自社特許で代替可能か、周辺技術をカバーする自社特許は存在するか、
+      さらに競合他社の特許との関係も考慮して、
+      本特許を維持すべきか放棄候補とすべきか評価してください。」
+    </p>
+  </div>
+
+
+  <h2>9．Notion＋ChatGPTとの使い分け</h2>
+
+  <p>
+    既にNotionに大量の特許公報を格納し、ChatGPTで分析する方法を使っている場合、
+    OneDrive＋Copilotとは役割を分けると面白いです。
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>環境</th>
+        <th>主な用途</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Notion＋ChatGPT</td>
+        <td>特許調査、技術分析、特許要約、競合分析、技術トレンド分析</td>
+      </tr>
+      <tr>
+        <td>OneDrive＋Copilot</td>
+        <td>社内特許ポートフォリオの分析、存廃判断、社内文書との横断分析</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+  <div class="conclusion">
+    <h2>まとめ</h2>
+
+    <p>
+      「自社特許をOneDriveにまとめて保存し、Copilotに周辺特許まで考慮させて
+      特許の存廃を判断させる」という考え方は、
+      単なる思いつきではなく、現在のAIを利用した特許ポートフォリオ管理の
+      方向性とかなり一致しています。
+    </p>
+
+    <p>
+      特に重要なのは、
+      <strong>「この特許単体に価値があるか」ではなく、
+      「この特許を放棄した場合、ポートフォリオ全体にどのような穴が生じるか」</strong>
+      をAIに分析させることです。
+    </p>
+
+    <p>
+      これが実現できれば、AIを単なる「特許要約ツール」ではなく、
+      <strong>「特許ポートフォリオの存廃判断支援ツール」</strong>
+      として利用できます。
+    </p>
+
+    <p>
+      ただし、AIの判定をそのまま存廃の最終決定にするのではなく、
+      AIによる候補抽出・比較・リスク分析を行い、
+      最終判断は研究開発部門・知財部門・事業部門で行う運用が適しています。
+    </p>
+  </div>
+
+</body>
+</html>
+```
