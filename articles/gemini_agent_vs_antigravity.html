@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini Agent と Antigravity の比較解説</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans JP', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
+
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 text-white font-bold text-sm shadow-sm">
+          AI
+        </span>
+        <span class="font-semibold text-slate-800 text-sm md:text-base tracking-tight">Gemini Agent vs Antigravity</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <!-- Markdown Copy Button -->
+        <button id="copy-md-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors focus:ring-2 focus:ring-slate-400 focus:outline-none">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+          </svg>
+          <span id="copy-md-label">Markdownをコピー</span>
+        </button>
+        <!-- HTML Copy Button -->
+        <button id="copy-html-btn" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-95 rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-blue-400 focus:outline-none">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+          </svg>
+          <span id="copy-html-label">HTMLをコピー</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 py-8 md:py-12 w-full flex-grow">
+    <!-- Feedback Alert Box -->
+    <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 border border-slate-700 transition-opacity duration-200">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      <span id="toast-text">クリップボードにコピーしました！</span>
+    </div>
+
+    <!-- Article Wrapper for Extraction -->
+    <article id="article-content" class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 md:p-10 space-y-8">
+      
+      <!-- Article Header -->
+      <div class="border-b border-slate-100 pb-6">
+        <div class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 mb-3">
+          技術解説 & 比較ガイド
+        </div>
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-slate-900">
+          Gemini Agentとは？Google Antigravityとの違いを徹底解説
+        </h1>
+        <p class="text-sm text-slate-500 mt-2">
+          タスク自律実行エージェントと開発者向けオーケストレーション基盤の役割・構造の差異
+        </p>
+      </div>
+
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2 border-l-4 border-blue-600 pl-3">
+          1. Gemini Agent の概要
+        </h2>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          Gemini Agentは、Googleの大規模言語モデル（LLM）「Gemini」を基盤に、単なる対話応答にとどまらず<strong>自律的なタスク計画・外部ツールの呼び出し・一連の業務実行までを担うマルチステップ型AIエージェント</strong>です。
+        </p>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          従来のチャットAIは「質問に対する回答の出力」という1問1答形式が基本でした。これに対しGemini Agentは、ユーザーが指定したゴール（目的）を解釈し、以下のようなフローを自律的に繰り返しながら実行します。
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+          <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
+            <div class="text-blue-600 font-bold text-sm mb-1">01. 計画立案 (Planning)</div>
+            <p class="text-xs text-slate-600 leading-relaxed">目的達成に必要なサブタスクを順序立てて整理し、行動計画を構築。</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
+            <div class="text-indigo-600 font-bold text-sm mb-1">02. ツール連携 (Action)</div>
+            <p class="text-xs text-slate-600 leading-relaxed">Workspace（Gmail、Docs等）やWeb検索、APIなどの外部ツールを自律操作。</p>
+          </div>
+          <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
+            <div class="text-teal-600 font-bold text-sm mb-1">03. 推論・検証 (Reflection)</div>
+            <p class="text-xs text-slate-600 leading-relaxed">実行結果を確認し、エラーの自己修正や追加探索を行いながら完結。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2 border-l-4 border-indigo-600 pl-3">
+          2. Google Antigravity とは
+        </h2>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          Google Antigravityは、エンジニアやビルダー向けに設計された<strong>自律型マルチエージェント開発・オーケストレーション専用プラットフォーム</strong>です。
+        </p>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          単一のタスクを肩代わりさせるアシスタントではなく、開発者が複数の自律エージェントをローカルやクラウド環境で並行稼働させ、ソフトウェア開発、システム運用、データパイプライン構築などの大規模プロジェクトを委任・制御するための「ミッションコントロールセンター」として機能します。
+        </p>
+      </section>
+
+      <section class="space-y-4">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2 border-l-4 border-teal-600 pl-3">
+          3. Gemini Agent と Antigravity の決定的な違い
+        </h2>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          両者はどちらも「Geminiを頭脳とする自律エージェント」という共通点を持ちますが、<strong>想定ユーザー、実行環境、目的のレイヤー</strong>において明確に差別化されています。
+        </p>
+
+        <!-- Responsive Comparison Table -->
+        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left text-xs md:text-sm">
+            <thead class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200">
+              <tr>
+                <th class="py-3 px-4 w-1/4">比較項目</th>
+                <th class="py-3 px-4 w-3/8 text-blue-700">Gemini Agent</th>
+                <th class="py-3 px-4 w-3/8 text-indigo-700">Google Antigravity</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/70 text-slate-600">
+              <tr>
+                <td class="py-3 px-4 font-medium text-slate-900 bg-slate-50/50">主な位置づけ</td>
+                <td class="py-3 px-4">エンドユーザー向けタスク実行エージェント</td>
+                <td class="py-3 px-4">開発者向けエージェント統括・開発基盤</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-medium text-slate-900 bg-slate-50/50">主な対象ユーザー</td>
+                <td class="py-3 px-4">一般ユーザー、ビジネスパーソン</td>
+                <td class="py-3 px-4">エンジニア、アーキテクト、ビルダー</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-medium text-slate-900 bg-slate-50/50">連携・操作対象</td>
+                <td class="py-3 px-4">Workspace、ブラウザ、日常業務用API</td>
+                <td class="py-3 px-4">コードベース、CLI/シェル、リポジトリ、MCP</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-medium text-slate-900 bg-slate-50/50">動作形態</td>
+                <td class="py-3 px-4">単一主体による直列タスク代行</td>
+                <td class="py-3 px-4">複数サブエージェントの動的並行オーケストレーション</td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-medium text-slate-900 bg-slate-50/50">環境アクセス</td>
+                <td class="py-3 px-4">安全なクラウドサンドボックス内</td>
+                <td class="py-3 px-4">ローカルファイル・ターミナルへの深いアクセス制御</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Detailed Comparison Points -->
+        <div class="space-y-4 pt-2">
+          <div class="border-l-2 border-slate-300 pl-4 space-y-1">
+            <h3 class="font-semibold text-slate-800 text-sm md:text-base">① 利用目的の違い：ユーザーのタスク支援 vs 開発基盤の提供</h3>
+            <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+              Gemini Agentの主眼は日常業務や情報処理の完了です。メール返信や日程調整、リサーチの作成など、作業者の手間を省きます。一方Antigravityはコード生成、リファクタリング、CI/CD連携などソフトウェア自体の自律運用・開発を目的とします。
+            </p>
+          </div>
+          <div class="border-l-2 border-slate-300 pl-4 space-y-1">
+            <h3 class="font-semibold text-slate-800 text-sm md:text-base">② 並行処理とオーケストレーションの深さ</h3>
+            <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+              Gemini Agentは対話フローの中で段階的に処理を進めます。対してAntigravityは課題に応じて複数のサブエージェント（Dynamic Subagents）を起動し、テスト担当と修正担当などを同時並行で走らせる並列処理基盤を備えています。
+            </p>
+          </div>
+          <div class="border-l-2 border-slate-300 pl-4 space-y-1">
+            <h3 class="font-semibold text-slate-800 text-sm md:text-base">③ 動作環境と権限の深度</h3>
+            <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
+              Gemini Agentは主にAPI経由でクラウド上で動作するため安全性が重視されます。Antigravityは開発端末のファイルツリーやシェルコマンドに直接アクセスし、成果物の書き出しや定時バッチの実行まで深く関与します。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="space-y-4 border-t border-slate-100 pt-6">
+        <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2 border-l-4 border-slate-800 pl-3">
+          4. 連携とエコシステムにおける関係性
+        </h2>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          Gemini AgentとAntigravityは競合するものではなく、<strong>「完成したアプリケーションとしてのエージェント」と「エージェントを作り・統率するための開発プラットフォーム」</strong>という補完関係にあります。
+        </p>
+        <div class="bg-blue-50/60 border border-blue-100 rounded-xl p-4 text-xs md:text-sm text-blue-900 space-y-2">
+          <p><strong>・Gemini Agent:</strong> エンドユーザーが即座に使える「完成された執事・アシスタント」。Googleのエコシステムに直感的に統合されています。</p>
+          <p><strong>・Antigravity:</strong> 自律エージェントを自前で拡張・構築・運用したいエンジニアのための「ワークベンチ／管制塔」。</p>
+        </div>
+        <p class="text-slate-700 leading-relaxed text-sm md:text-base">
+          日常的なタスクの迅速な自動化には<strong>Gemini Agent</strong>、独自スキルの組み込みやコードベース全体を任せるエージェント群の統率には<strong>Google Antigravity</strong>が適しています。
+        </p>
+      </section>
+
+    </article>
+  </main>
+
+  <footer class="py-6 text-center text-xs text-slate-400 border-t border-slate-200">
+    Gemini Agent & Antigravity Documentation Preview
+  </footer>
+
+  <script>
+    // Safe fallback copy function for strict iframe contexts
+    function copyTextToClipboard(text, successCallback) {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(successCallback).catch(function() {
+          fallbackCopy(text, successCallback);
+        });
+      } else {
+        fallbackCopy(text, successCallback);
+      }
+    }
+
+    function fallbackCopy(text, successCallback) {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+      textArea.style.opacity = "0";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        const successful = document.execCommand('copy');
+        if (successful && successCallback) {
+          successCallback();
+        }
+      } catch (err) {
+        console.error('Fallback copy failed', err);
+      }
+      document.body.removeChild(textArea);
+    }
+
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toast-text');
+    let toastTimeout;
+
+    function showToast(msg) {
+      toastText.textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 2500);
+    }
+
+    // Markdown data
+    const markdownContent = `# Gemini Agent と Antigravity の違い
+
+## 1. Gemini Agent の概要
+Gemini Agentは、Googleの大規模言語モデル（LLM）「Gemini」を基盤に、単なる対話応答にとどまらず自律的なタスク計画・外部ツールの呼び出し・一連の業務実行までを担うマルチステップ型AIエージェントです。
+
+- **計画立案 (Planning)**: 目的達成に必要なサブタスクを順序立てて整理する。
+- **ツール連携 (Action)**: Google WorkspaceやWeb検索、APIなどの外部ツールを自律操作する。
+- **推論・検証 (Reflection)**: 実行結果を確認し、エラーの修正や追加探索を行いながら完結させる。
+
+## 2. Google Antigravity とは
+Google Antigravityは、エンジニアやビルダー向けに設計された自律型マルチエージェント開発・オーケストレーション専用プラットフォームです。
+複数の自律エージェントをローカルやクラウド環境で並行稼働させ、ソフトウェア開発、システム運用、パイプライン構築などの大規模プロジェクトを委任・制御するための「管制塔」として機能します。
+
+## 3. Gemini Agent と Antigravity の決定的な違い
+
+| 比較項目 | Gemini Agent | Google Antigravity |
+| :--- | :--- | :--- |
+| **主な位置づけ** | エンドユーザー向けタスク実行エージェント | 開発者向けエージェント統括・開発基盤 |
+| **主な対象ユーザー** | 一般ユーザー、ビジネスパーソン | エンジニア、アーキテクト、ビルダー |
+| **連携・操作対象** | Workspace、ブラウザ、日常業務用API | コードベース、CLI/シェル、リポジトリ、MCP |
+| **動作形態** | 単一主体による直列タスク代行 | 複数サブエージェントの動的並行オーケストレーション |
+| **環境アクセス** | 安全なクラウドサンドボックス内 | ローカルファイル・ターミナルへの深いアクセス |
+
+### 主なポイント
+1. **利用目的の違い**: 日常的な業務タスク支援（Gemini Agent） vs システム・コードの自律開発・運用基盤（Antigravity）
+2. **オーケストレーション**: 対話文脈での一連処理 vs 複数サブエージェントの同時並行稼働
+3. **アクセス深度**: クラウドAPI連携 vs ローカルファイルツリー・端末シェルの直接制御
+
+## 4. 連携とエコシステムにおける関係性
+競合ではなく、「完成されたエンドユーザー向けエージェント（Gemini Agent）」と「エージェントを作り動かすための開発・管制基盤（Antigravity）」という補完関係にあります。`;
+
+    // Copy HTML listener
+    document.getElementById('copy-html-btn').addEventListener('click', function() {
+      const articleEl = document.getElementById('article-content');
+      const htmlToCopy = articleEl.outerHTML;
+      copyTextToClipboard(htmlToCopy, function() {
+        const label = document.getElementById('copy-html-label');
+        const orig = label.textContent;
+        label.textContent = 'コピー完了!';
+        showToast('HTMLコードをコピーしました！');
+        setTimeout(() => { label.textContent = orig; }, 2000);
+      });
+    });
+
+    // Copy Markdown listener
+    document.getElementById('copy-md-btn').addEventListener('click', function() {
+      copyTextToClipboard(markdownContent, function() {
+        const label = document.getElementById('copy-md-label');
+        const orig = label.textContent;
+        label.textContent = 'コピー完了!';
+        showToast('Markdownテキストをコピーしました！');
+        setTimeout(() => { label.textContent = orig; }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
