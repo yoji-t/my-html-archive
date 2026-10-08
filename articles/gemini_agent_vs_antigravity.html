@@ -16,6 +16,14 @@
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col justify-between">
 
+  <div class="bg-slate-100 border-b border-slate-200">
+    <div class="max-w-4xl mx-auto px-4 py-2">
+      <a href="https://yoji-t.github.io/my-html-archive/" class="inline-flex items-center text-xs font-medium text-slate-700 hover:text-blue-700 transition-colors">
+        https://yoji-t.github.io/my-html-archive/
+      </a>
+    </div>
+  </div>
+
   <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
     <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
       <div class="flex items-center space-x-2">
@@ -26,14 +34,14 @@
       </div>
       <div class="flex items-center gap-2">
         <!-- Markdown Copy Button -->
-        <button id="copy-md-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors focus:ring-2 focus:ring-slate-400 focus:outline-none">
+        <button id="copy-md-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors focus:ring-2 focus:ring-slate-300 focus:outline-none">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/>
           </svg>
           <span id="copy-md-label">Markdownをコピー</span>
         </button>
         <!-- HTML Copy Button -->
-        <button id="copy-html-btn" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-95 rounded-lg shadow-sm transition-all focus:ring-2 focus:ring-blue-400 focus:outline-none">
+        <button id="copy-html-btn" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:scale-95 rounded-lg shadow-sm transition-colors focus:ring-2 focus:ring-blue-300 focus:outline-none">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
           </svg>
@@ -45,7 +53,7 @@
 
   <main class="max-w-4xl mx-auto px-4 py-8 md:py-12 w-full flex-grow">
     <!-- Feedback Alert Box -->
-    <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 border border-slate-700 transition-opacity duration-200">
+    <div id="toast" class="hidden fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-xl flex items-center space-x-2 border border-slate-700 transition-opacity duration-300">
       <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
       </svg>
@@ -73,10 +81,10 @@
           1. Gemini Agent の概要
         </h2>
         <p class="text-slate-700 leading-relaxed text-sm md:text-base">
-          Gemini Agentは、Googleの大規模言語モデル（LLM）「Gemini」を基盤に、単なる対話応答にとどまらず<strong>自律的なタスク計画・外部ツールの呼び出し・一連の業務実行までを担うマルチステップ型AIエージェント</strong>です。
+          Gemini Agentは、Googleの大規模言語モデル（LLM）「Gemini」を基盤に、単なる対話応答にとどまらず<strong>自律的なタスク計画・外部ツールの呼び出し・一連の作業完遂</strong>を実行できる仕組みです。
         </p>
         <p class="text-slate-700 leading-relaxed text-sm md:text-base">
-          従来のチャットAIは「質問に対する回答の出力」という1問1答形式が基本でした。これに対しGemini Agentは、ユーザーが指定したゴール（目的）を解釈し、以下のようなフローを自律的に繰り返しながら実行します。
+          従来のチャットAIは「質問に対する回答の出力」という1問1答形式が基本でした。これに対しGemini Agentは、ユーザーが指定したゴールをもとに、必要な資料収集・調査・構成案の作成・実行の検証までを順に進めます。
         </p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
           <div class="bg-slate-50 border border-slate-100 rounded-xl p-4">
@@ -102,7 +110,7 @@
           Google Antigravityは、エンジニアやビルダー向けに設計された<strong>自律型マルチエージェント開発・オーケストレーション専用プラットフォーム</strong>です。
         </p>
         <p class="text-slate-700 leading-relaxed text-sm md:text-base">
-          単一のタスクを肩代わりさせるアシスタントではなく、開発者が複数の自律エージェントをローカルやクラウド環境で並行稼働させ、ソフトウェア開発、システム運用、データパイプライン構築などの大規模プロジェクトを委任・制御するための「ミッションコントロールセンター」として機能します。
+          単一のタスクを肩代わりさせるアシスタントではなく、開発者が複数の自律エージェントをローカルやクラウド環境で並行稼働させ、ソフトウェア開発、システム運用、パイプライン構築などの大規模プロジェクトを自律的に扱えるようにする基盤です。
         </p>
       </section>
 
@@ -111,7 +119,7 @@
           3. Gemini Agent と Antigravity の決定的な違い
         </h2>
         <p class="text-slate-700 leading-relaxed text-sm md:text-base">
-          両者はどちらも「Geminiを頭脳とする自律エージェント」という共通点を持ちますが、<strong>想定ユーザー、実行環境、目的のレイヤー</strong>において明確に差別化されています。
+          両者はどちらも「Geminiを頭脳とする自律エージェント」という共通点を持ちますが、<strong>想定ユーザー、実行環境、目的のレイヤー</strong>が大きく異なります。
         </p>
 
         <!-- Responsive Comparison Table -->
@@ -159,19 +167,19 @@
           <div class="border-l-2 border-slate-300 pl-4 space-y-1">
             <h3 class="font-semibold text-slate-800 text-sm md:text-base">① 利用目的の違い：ユーザーのタスク支援 vs 開発基盤の提供</h3>
             <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
-              Gemini Agentの主眼は日常業務や情報処理の完了です。メール返信や日程調整、リサーチの作成など、作業者の手間を省きます。一方Antigravityはコード生成、リファクタリング、CI/CD連携などソフトウェア自体の自律運用・開発を目的とします。
+              Gemini Agentの主眼は日常業務や情報処理の完了です。メール返信や日程調整、リサーチの作成など、作業者の手間を省きます。一方Antigravityは、ソフトウェア開発や運用に直結する「構成・実行・検証」を自律的に扱えるようにするための基盤として設計されています。
             </p>
           </div>
           <div class="border-l-2 border-slate-300 pl-4 space-y-1">
             <h3 class="font-semibold text-slate-800 text-sm md:text-base">② 並行処理とオーケストレーションの深さ</h3>
             <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
-              Gemini Agentは対話フローの中で段階的に処理を進めます。対してAntigravityは課題に応じて複数のサブエージェント（Dynamic Subagents）を起動し、テスト担当と修正担当などを同時並行で走らせる並列処理基盤を備えています。
+              Gemini Agentは対話フローの中で段階的に処理を進めます。対してAntigravityは課題に応じて複数のサブエージェント（Dynamic Subagents）を起動し、役割分担しながら並行的に進めることを得意とします。これは複雑な開発作業や検証の分岐に強く効きます。
             </p>
           </div>
           <div class="border-l-2 border-slate-300 pl-4 space-y-1">
             <h3 class="font-semibold text-slate-800 text-sm md:text-base">③ 動作環境と権限の深度</h3>
             <p class="text-xs md:text-sm text-slate-600 leading-relaxed">
-              Gemini Agentは主にAPI経由でクラウド上で動作するため安全性が重視されます。Antigravityは開発端末のファイルツリーやシェルコマンドに直接アクセスし、成果物の書き出しや定時バッチの実行まで深く関与します。
+              Gemini Agentは主にAPI経由でクラウド上で動作するため安全性が重視されます。一方Antigravityは開発端末のファイルツリーやシェルコマンドに直接アクセスし、ローカル環境やMCP連携を利用しながら実行するため、より開発者寄りの制御が可能です。
             </p>
           </div>
         </div>
@@ -182,14 +190,14 @@
           4. 連携とエコシステムにおける関係性
         </h2>
         <p class="text-slate-700 leading-relaxed text-sm md:text-base">
-          Gemini AgentとAntigravityは競合するものではなく、<strong>「完成したアプリケーションとしてのエージェント」と「エージェントを作り・統率するための開発プラットフォーム」</strong>という補完関係にあります。
+          Gemini AgentとAntigravityは競合するものではなく、<strong>「完成したアプリケーションとしてのエージェント」と「エージェントを作り・統率する���盤」</strong>という役割の違いを持つと捉えるのが適切です。
         </p>
         <div class="bg-blue-50/60 border border-blue-100 rounded-xl p-4 text-xs md:text-sm text-blue-900 space-y-2">
-          <p><strong>・Gemini Agent:</strong> エンドユーザーが即座に使える「完成された執事・アシスタント」。Googleのエコシステムに直感的に統合されています。</p>
+          <p><strong>・Gemini Agent:</strong> エンドユーザーが即座に使える「完成された執事・アシスタント」。Googleのエコシステムに直感的に統合されている。</p>
           <p><strong>・Antigravity:</strong> 自律エージェントを自前で拡張・構築・運用したいエンジニアのための「ワークベンチ／管制塔」。</p>
         </div>
         <p class="text-slate-700 leading-relaxed text-sm md:text-base">
-          日常的なタスクの迅速な自動化には<strong>Gemini Agent</strong>、独自スキルの組み込みやコードベース全体を任せるエージェント群の統率には<strong>Google Antigravity</strong>が適しています。
+          日常的なタスクの迅速な自動化には<strong>Gemini Agent</strong>、独自スキルの組み込みやコードベース全体を任せるエージェント群の統率には<strong>Antigravity</strong>が向いています。
         </p>
       </section>
 
@@ -250,7 +258,7 @@
     const markdownContent = `# Gemini Agent と Antigravity の違い
 
 ## 1. Gemini Agent の概要
-Gemini Agentは、Googleの大規模言語モデル（LLM）「Gemini」を基盤に、単なる対話応答にとどまらず自律的なタスク計画・外部ツールの呼び出し・一連の業務実行までを担うマルチステップ型AIエージェントです。
+Gemini Agentは、Googleの大規模言語モデル（LLM）「Gemini」を基盤に、単なる対話応答にとどまらず自律的なタスク計画・外部ツールの呼び出し・一連の作業完遂を実行できる仕組みです。
 
 - **計画立案 (Planning)**: 目的達成に必要なサブタスクを順序立てて整理する。
 - **ツール連携 (Action)**: Google WorkspaceやWeb検索、APIなどの外部ツールを自律操作する。
@@ -258,7 +266,7 @@ Gemini Agentは、Googleの大規模言語モデル（LLM）「Gemini」を基�
 
 ## 2. Google Antigravity とは
 Google Antigravityは、エンジニアやビルダー向けに設計された自律型マルチエージェント開発・オーケストレーション専用プラットフォームです。
-複数の自律エージェントをローカルやクラウド環境で並行稼働させ、ソフトウェア開発、システム運用、パイプライン構築などの大規模プロジェクトを委任・制御するための「管制塔」として機能します。
+複数の自律エージェントをローカルやクラウド環境で並行稼働させ、ソフトウェア開発、システム運用、パイプライン構築などの大規模プロジェクトを自律的に扱えるようにします。
 
 ## 3. Gemini Agent と Antigravity の決定的な違い
 
@@ -276,7 +284,7 @@ Google Antigravityは、エンジニアやビルダー向けに設計された�
 3. **アクセス深度**: クラウドAPI連携 vs ローカルファイルツリー・端末シェルの直接制御
 
 ## 4. 連携とエコシステムにおける関係性
-競合ではなく、「完成されたエンドユーザー向けエージェント（Gemini Agent）」と「エージェントを作り動かすための開発・管制基盤（Antigravity）」という補完関係にあります。`;
+競合ではなく、「完成されたエンドユーザー向けエージェント（Gemini Agent）」と「エージェントを作り動かすための開発・管制基盤（Antigravity）」という異なる役割の関係です。`;
 
     // Copy HTML listener
     document.getElementById('copy-html-btn').addEventListener('click', function() {
