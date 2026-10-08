@@ -132,5 +132,16 @@
       "Notion"
     ],
     "summary": "AIを活用した存廃の事例"
+  },
+      {
+    "id": "gemini_agent_vs_antigravity",
+    "title": "Gemini AgentをAntigravityと比較しながら説明",
+    "file": "gemini_agent_vs_antigravity.html",
+    "date": "2026-10-09",
+    "tags": [
+      "Gyazo",
+      "Notion"
+    ],
+    "summary": "Gemini AgentをAntigravityと比較しながら説明"
   }
 ]
