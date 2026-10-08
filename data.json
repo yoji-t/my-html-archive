@@ -110,5 +110,16 @@
       "Notion"
     ],
     "summary": "特許情報をNotionに格納して"
+  },
+   {
+    "id": "1008China",
+    "title": "1008公開分の中国",
+    "file": "1008China.html",
+    "date": "2026-10-08",
+    "tags": [
+      "Gyazo",
+      "Notion"
+    ],
+    "summary": "1008公開分の中国"
   }
 ]
