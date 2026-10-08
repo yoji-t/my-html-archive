@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WIPO Patentscope WO特許監視ダッシュボード | B60C × 中国優先権</title>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --primary-light: #3b82f6;
+      --primary-bg: #eff6ff;
+      --slate-50: #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --danger-border: #fecaca;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --warning-border: #fde68a;
+      --info: #0284c7;
+      --info-bg: #f0f9ff;
+      --info-border: #bae6fd;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --card-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+      background-color: var(--slate-100);
+      color: var(--slate-800);
+      line-height: 1.5;
+      padding-bottom: 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      color: white;
+      padding: 24px 32px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .title-area h1 {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .title-area h1 .badge-source {
+      background-color: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .title-area p {
+      color: #93c5fd;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .header-meta {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .query-tag {
+      background-color: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 6px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #bfdbfe;
+    }
+
+    .btn-export {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+    .btn-export:hover {
+      background-color: #1d4ed8;
+    }
+
+    .main-container {
+      max-width: 1400px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+
+    /* KPI Summary Cards */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .kpi-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      border-left: 4px solid var(--primary-light);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--card-hover);
+    }
+    .kpi-card.danger {
+      border-left-color: var(--danger);
+    }
+    .kpi-card.warning {
+      border-left-color: var(--warning);
+    }
+    .kpi-card.info {
+      border-left-color: var(--info);
+    }
+
+    .kpi-label {
+      font-size: 13px;
+      color: var(--slate-600);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--slate-900);
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .kpi-value .sub-unit {
+      font-size: 14px;
+      color: var(--slate-600);
+      font-weight: 500;
+    }
+
+    .kpi-desc {
+      font-size: 12px;
+      color: var(--slate-600);
+      margin-top: 8px;
+    }
+
+    /* Charts Section */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    @media (max-width: 1024px) {
+      .charts-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--slate-200);
+      padding-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--slate-800);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 280px;
+      width: 100%;
+    }
+
+    /* Filter & Search Bar */
+    .filter-section {
+      background: white;
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      background: var(--slate-100);
+      border: 1px solid var(--slate-300);
+      color: var(--slate-700);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover {
+      background: var(--slate-200);
+    }
+    .filter-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .search-box {
+      position: relative;
+      min-width: 280px;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 8px 12px 8px 34px;
+      border: 1px solid var(--slate-300);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    .search-box input:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+    }
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate-600);
+      font-size: 14px;
+    }
+
+    /* Table Styles */
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13px;
+    }
+
+    thead th {
+      background-color: var(--slate-50);
+      color: var(--slate-700);
+      font-weight: 700;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--slate-200);
+      white-space: nowrap;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid var(--slate-200);
+      transition: background 0.15s;
+    }
+    tbody tr:hover {
+      background-color: #f8fafc;
+    }
+
+    tbody td {
+      padding: 14px 16px;
+      vertical-align: middle;
+    }
+
+    .wo-link {
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .wo-link:hover {
+      text-decoration: underline;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge-x {
+      background-color: var(--danger-bg);
+      color: var(--danger);
+      border: 1px solid var(--danger-border);
+    }
+    .badge-y {
+      background-color: var(--warning-bg);
+      color: var(--warning);
+      border: 1px solid var(--warning-border);
+    }
+    .badge-a {
+      background-color: var(--info-bg);
+      color: var(--info);
+      border: 1px solid var(--info-border);
+    }
+
+    .btn-detail {
+      background: white;
+      border: 1px solid var(--slate-300);
+      color: var(--slate-700);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-detail:hover {
+      background: var(--slate-100);
+      border-color: var(--slate-600);
+    }
+
+    /* Modal Styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      max-width: 900px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      background: var(--slate-50);
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .modal-title-area h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-bottom: 4px;
+    }
+
+    .modal-title-area p {
+      font-size: 13px;
+      color: var(--slate-600);
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--slate-600);
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+    .btn-close:hover {
+      color: var(--slate-900);
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--slate-900);
+      margin-top: 20px;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title:first-child {
+      margin-top: 0;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      background: var(--slate-50);
+      padding: 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      border: 1px solid var(--slate-200);
+    }
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    .meta-label {
+      color: var(--slate-600);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .meta-val {
+      color: var(--slate-900);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* Claims Accordion & Style */
+    .claim-item {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      overflow: hidden;
+    }
+    .claim-header {
+      padding: 10px 14px;
+      background: var(--slate-50);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+    .claim-header:hover {
+      background: var(--slate-100);
+    }
+    .claim-content {
+      padding: 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--slate-800);
+      border-top: 1px solid var(--slate-200);
+      background: #fafafa;
+    }
+
+    /* ISR Citations Matrix in Modal */
+    .isr-card {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 10px;
+      border-left: 4px solid var(--slate-300);
+    }
+    .isr-card.cat-X {
+      border-left-color: var(--danger);
+      background-color: #fffaf9;
+    }
+    .isr-card.cat-Y {
+      border-left-color: var(--warning);
+      background-color: #fffdf7;
+    }
+    .isr-card.cat-A {
+      border-left-color: var(--info);
+    }
+
+    .isr-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .isr-company {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--slate-900);
+    }
+    .isr-body {
+      font-size: 12px;
+      color: var(--slate-700);
+      line-height: 1.5;
+    }
+
+    .footer {
+      max-width: 1400px;
+      margin: 32px auto 0;
+      text-align: center;
+      font-size: 12px;
+      color: var(--slate-600);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="title-area">
+        <h1>
+          WIPO Patentscope WO特許監視ダッシュボード
+          <span class="badge-source">IPC: B60C × 中国優先権</span>
+        </h1>
+        <p>新規公開WO出願（中国基礎出願）の書誌事項・請求項・国際調査報告書(ISR)引用企業・X/Y/A分析</p>
+      </div>
+      <div class="header-meta">
+        <div class="query-tag">IC:(B60C) AND PCN:(CN)</div>
+        <button class="btn-export" onclick="exportToCSV()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          CSV出力
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="main-container">
+
+    <!-- KPI Summary Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card info">
+        <div class="kpi-label">監視対象・最新公開件数</div>
+        <div class="kpi-value" id="kpi-total">8 <span class="sub-unit">件</span></div>
+        <div class="kpi-desc">WIPO毎週木曜公開 / 中国優先権・B60C</div>
+      </div>
+      <div class="kpi-card danger">
+        <div class="kpi-label">新規性・進歩性 拒絶リスク (X引用あり)</div>
+        <div class="kpi-value" id="kpi-x-rate">87.5 <span class="sub-unit">% (7/8件)</span></div>
+        <div class="kpi-desc">単独で請求項の特許性を否定する文献あり</div>
+      </div>
+      <div class="kpi-card warning">
+        <div class="kpi-label">国際調査報告書 (ISR) 総引用文献数</div>
+        <div class="kpi-value" id="kpi-citations">24 <span class="sub-unit">件 (X: 8, Y: 9, A: 7)</span></div>
+        <div class="kpi-desc">1出願あたり平均 3.0 件引用</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">被引用最多企業 (特許ブロック首位)</div>
+        <div class="kpi-value" style="font-size: 20px; line-height: 1.3;" id="kpi-top-company">株式会社ブリヂストン</div>
+        <div class="kpi-desc">被引用5件 (うちX引用4件 / 強力な先行技術網)</div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-grid">
+      <!-- Chart 1: Company Citations Ranking -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+            競合企業別 X / Y / A 被引用文献数ランキング（どの会社の特許が引用されたか）
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="companyCitationChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart 2: Category Breakdown -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="M14.83 14.83l4.24 4.24"/><path d="M9.17 14.83l-4.24 4.24"/></svg>
+            ISR引用カテゴリ構成比
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="categoryPieChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="filter-section">
+      <div class="filter-buttons">
+        <button class="filter-btn active" onclick="setFilter('all', this)">すべて (8)</button>
+        <button class="filter-btn" onclick="setFilter('has-x', this)">X引用あり (7)</button>
+        <button class="filter-btn" onclick="setFilter('bridgestone', this)">ブリヂストン被引用 (4)</button>
+        <button class="filter-btn" onclick="setFilter('sumitomo', this)">住友ゴム被引用 (3)</button>
+        <button class="filter-btn" onclick="setFilter('yokohama', this)">横浜ゴム出願 (4)</button>
+        <button class="filter-btn" onclick="setFilter('sensor', this)">センサ・TPMS (2)</button>
+      </div>
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="出願番号・出願人・キーワードで検索..." oninput="handleSearch()">
+      </div>
+    </div>
+
+    <!-- Patent Applications Table -->
+    <div class="table-container">
+      <div class="table-responsive">
+        <table id="patentTable">
+          <thead>
+            <tr>
+              <th>リスク</th>
+              <th>WO公開番号</th>
+              <th>公開日</th>
+              <th>出願人 (Applicant)</th>
+              <th>発明の名称 (Title)</th>
+              <th>IPC分類</th>
+              <th>請求項数</th>
+              <th>ISR引用文献 (企業 / X・Y・A)</th>
+              <th>詳細</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody">
+            <!-- Dynamically Rendered by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Cross Matrix Section -->
+    <div class="card" style="margin-top: 24px;">
+      <div class="card-header">
+        <div class="card-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M3 15h18"/><path d="M9 3v18"/><path d="M15 3v18"/></svg>
+          クロス分析マトリクス（出願案件 × 引用企業 × 拒絶区分）
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table style="font-size: 12px;">
+          <thead>
+            <tr>
+              <th>WO公開番号</th>
+              <th>出願人</th>
+              <th>ブリヂストン</th>
+              <th>住友ゴム</th>
+              <th>横浜ゴム</th>
+              <th>Continental</th>
+              <th>Michelin</th>
+              <th>Goodyear</th>
+              <th>中国勢(中策/玲瓏等)</th>
+            </tr>
+          </thead>
+          <tbody id="matrixBody">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>WIPO PATENTSCOPE API & ISR Analysis Pipeline | Generated by Antigravity Automation Engine</p>
+      <p style="margin-top: 4px; color: #94a3b8;">毎週木曜日のWIPO公報発行に合わせて自動差分抽出・レポート生成を実行します。</p>
+    </div>
+
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="modal-overlay" id="detailModal" onclick="closeModalOnOverlay(event)">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title-area">
+          <h2 id="modalWoNumber">WO/2026/000000</h2>
+          <p id="modalTitle">発明の名称</p>
+        </div>
+        <button class="btn-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Bibliographic Data -->
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10"/><path d="M6 10h10"/></svg>
+          書誌事項 (Bibliographic Data)
+        </div>
+        <div class="meta-grid" id="modalMeta"></div>
+
+        <!-- Abstract -->
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          要約 (Abstract)
+        </div>
+        <p id="modalAbstract" style="font-size: 13px; line-height: 1.6; background: #f8fafc; padding: 12px; border-radius: 8px; border: 1px solid var(--slate-200);"></p>
+
+        <!-- Claims Section -->
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          請求項 (Claims)
+        </div>
+        <div id="modalClaims"></div>
+
+        <!-- ISR Citations & Company Analysis -->
+        <div class="section-title">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="m9 15 2 2 4-4"/></svg>
+          国際調査報告書 (ISR) 引用文献・引用企業マトリクス
+        </div>
+        <div id="modalIsr"></div>
+
+        <!-- Patentscope Link Button -->
+        <div style="margin-top: 24px; text-align: right;">
+          <a id="modalPatentscopeBtn" href="#" target="_blank" class="btn-export" style="background: #0f172a; text-decoration: none;">
+            Patentscopeで原本公報・全資料を見る ↗
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const EMBEDDED_PATENT_DATA = {
+    "search_parameters":  {
+                              "database":  "WIPO PATENTSCOPE",
+                              "query":  "IC:(B60C) AND PCN:(CN)",
+                              "publication_type":  "WO (PCT International Applications)",
+                              "ipc_classification":  "B60C (Vehicle Tyres; Tyre Inflation; Tyre Changing)",
+                              "priority_country":  "CN (China)",
+                              "update_frequency":  "Weekly (Every Thursday)",
+                              "last_updated":  "2026-10-08T10:00:00+09:00"
+                          },
+    "summary":  {
+                    "total_applications":  10,
+                    "has_x_citations_count":  10,
+                    "has_y_citations_count":  10,
+                    "x_citation_rate":  100,
+                    "total_citations":  31,
+                    "citation_categories":  {
+                                                "X":  10,
+                                                "Y":  12,
+                                                "A":  9
+                                            },
+                    "top_cited_companies":  [
+                                                {
+                                                    "name":  "株式会社ブリヂストン (Bridgestone Corp)",
+                                                    "y_count":  1,
+                                                    "a_count":  0,
+                                                    "x_count":  4,
+                                                    "total":  5
+                                                },
+                                                {
+                                                    "name":  "住友ゴム工業株式会社 (Sumitomo Rubber Industries, Ltd.)",
+                                                    "y_count":  3,
+                                                    "a_count":  0,
+                                                    "x_count":  3,
+                                                    "total":  6
+                                                },
+                                                {
+                                                    "name":  "横浜ゴム株式会社 (The Yokohama Rubber Co., Ltd.)",
+                                                    "y_count":  1,
+                                                    "a_count":  0,
+                                                    "x_count":  1,
+                                                    "total":  2
+                                                },
+                                                {
+                                                    "name":  "Continental (Continental Automotive Systems, Inc.)",
+                                                    "y_count":  0,
+                                                    "a_count":  0,
+                                                    "x_count":  1,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "株式会社ブリヂストン (Bridgestone Corporation)",
+                                                    "y_count":  0,
+                                                    "a_count":  0,
+                                                    "x_count":  1,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "Continental (Continental Reifen Deutschland GmbH)",
+                                                    "y_count":  1,
+                                                    "a_count":  2,
+                                                    "x_count":  0,
+                                                    "total":  3
+                                                },
+                                                {
+                                                    "name":  "Michelin (Compagnie Générale des Établissements Michelin)",
+                                                    "y_count":  1,
+                                                    "a_count":  1,
+                                                    "x_count":  0,
+                                                    "total":  2
+                                                },
+                                                {
+                                                    "name":  "太平洋工業株式会社 (Pacific Industrial Co., Ltd.)",
+                                                    "y_count":  1,
+                                                    "a_count":  0,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "The Goodyear Tire \u0026 Rubber Company",
+                                                    "y_count":  1,
+                                                    "a_count":  0,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "中策ゴム集団有限公司 (Zhongce Rubber Group Co., Ltd.)",
+                                                    "y_count":  1,
+                                                    "a_count":  0,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "賽輪集団股份有限公司 (Sailun Group Co., Ltd.)",
+                                                    "y_count":  0,
+                                                    "a_count":  1,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "Pirelli Tyre S.p.A.",
+                                                    "y_count":  0,
+                                                    "a_count":  1,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "Hankook Tire \u0026 Technology Co., Ltd.",
+                                                    "y_count":  0,
+                                                    "a_count":  1,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "山東玲瓏輪胎股份有限公司 (Shandong Linglong Tyre Co., Ltd.)",
+                                                    "y_count":  1,
+                                                    "a_count":  0,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "Compagnie Générale des Établissements Michelin (ミシュラン)",
+                                                    "y_count":  1,
+                                                    "a_count":  0,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "三角輪胎股份有限公司 (Triangle Tyre Co., Ltd.)",
+                                                    "y_count":  0,
+                                                    "a_count":  1,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "浦林成山(山東)輪胎有限公司 (Prinx Chengshan Tyre Co., Ltd.)",
+                                                    "y_count":  0,
+                                                    "a_count":  1,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                },
+                                                {
+                                                    "name":  "上海源悦汽車電子股份有限公司 (Shanghai Yuanyue Auto Electronics)",
+                                                    "y_count":  0,
+                                                    "a_count":  1,
+                                                    "x_count":  0,
+                                                    "total":  1
+                                                }
+                                            ]
+                },
+    "applications":  [
+                         {
+                             "wo_number":  "WO/2026/189201",
+                             "pct_number":  "PCT/CN2026/081234",
+                             "publication_date":  "2026-10-08",
+                             "applicant":  "中策ゴム集団有限公司 (Zhongce Rubber Group Co., Ltd.)",
+                             "applicant_type":  "中国現地大手企業",
+                             "title_en":  "Heavy-duty radial tire and tread pattern with low rolling resistance",
+                             "title_ja":  "低転がり抵抗を有する重荷重用ラジアルタイヤおよびトレッドパターン",
+                             "priority_number":  "CN202510345678.9",
+                             "priority_date":  "2025-04-02",
+                             "ipc":  "B60C 11/03, B60C 11/12, B60C 9/20",
+                             "abstract":  "トラック・バス用重荷重ラジアルタイヤにおいて、トレッドセンター部の周方向主溝とショルダー部のサイプ深さプロファイルを最適化し、低転がり抵抗と耐偏摩耗性を両立。",
+                             "claims_count":  6,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "トレッド踏面にタイヤ周方向に連続する4本の周方向主溝を備える重荷重用ラジアルタイヤであって、センター側主溝の幅W1とショルダー側主溝の幅W2の比W1/W2が1.25～1.45であり、ショルダー陸部に配置されたサイプがトレッド端に向かって深さが漸減する傾斜底面を有することを特徴とする重荷重用ラジアルタイヤ。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記サイプの開口幅が0.4～0.8mmであり、かつジグザグ形状を有する請求項1記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "前記ショルダー陸部のブロック周方向長さがピッチ周期で変化する請求項1または2記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  4,
+                                                          "text":  "交差スチールコードベルト層の外側に高モジュラス補強層を備える請求項1～3のいずれか1項記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  5,
+                                                          "text":  "前記センター側主溝の溝壁傾斜角度が5°～12°である請求項1～4のいずれか1項記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  6,
+                                                          "text":  "請求項1～5のいずれか1項記載のタイヤを加硫成形する金型。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "JP 2022-160415 A",
+                                                         "company":  "株式会社ブリヂストン (Bridgestone Corp)",
+                                                         "pub_date":  "2022-10-18",
+                                                         "relevant_claims":  "1, 2, 4",
+                                                         "passages":  "段落 [0018]-[0035], 図2-3 (主溝幅比率1.30および傾斜底サイプ構成が開示。請求項1を直接否定)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "WO 2023/182100 A1",
+                                                         "company":  "住友ゴム工業株式会社 (Sumitomo Rubber Industries, Ltd.)",
+                                                         "pub_date":  "2023-09-28",
+                                                         "relevant_claims":  "3, 5",
+                                                         "passages":  "段落 [0025]-[0040] (ブロック倒れ込み抑制ジグザグサイプとピッチ配列)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "EP 4108480 A1",
+                                                         "company":  "Continental (Continental Reifen Deutschland GmbH)",
+                                                         "pub_date":  "2022-12-28",
+                                                         "relevant_claims":  "1-6",
+                                                         "passages":  "全請求項 (TBラジアルタイヤの低転がり抵抗トレッド設計)"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026189201"
+                         },
+                         {
+                             "wo_number":  "WO/2026/189345",
+                             "pct_number":  "PCT/CN2026/082109",
+                             "publication_date":  "2026-10-08",
+                             "applicant":  "山東玲瓏輪胎股份有限公司 (Shandong Linglong Tyre Co., Ltd.)",
+                             "applicant_type":  "中国現地大手企業",
+                             "title_en":  "Electric vehicle tire tread rubber composition and tire",
+                             "title_ja":  "電気自動車用タイヤトレッドゴム組成物およびタイヤ",
+                             "priority_number":  "CN202510367890.1",
+                             "priority_date":  "2025-04-07",
+                             "ipc":  "B60C 1/00, C08L 9/06, B60C 11/00",
+                             "abstract":  "EV（電気自動車）の高トルク・静粛性要求に応えるため、バイオマス由来シリカと特定のスチレン・イソプレン・ブタジエン三元共重合体を含有する高グリップ・耐摩耗トレッドゴム。",
+                             "claims_count":  7,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "スチレン・イソプレン・ブタジエン共重合体40～70質量部と末端変性ブタジエンゴム30～60質量部を含むジエン系ゴム100質量部に対し、窒素吸着比表面積180～230m2/gの表面処理バイオシリカを70～110質量部配合し、0℃におけるtanδが0.45以上、60℃におけるtanδが0.09以下であることを特徴とする電気自動車用タイヤトレッドゴム組成物。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記表面処理バイオシリカが籾殻灰由来のケイ酸ナトリウムから合成されたものである請求項1記載のゴム組成物。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "メルカプト基含有シランカップリング剤をシリカに対して6～12質量%含有する請求項1または2記載のゴム組成物。"
+                                                      },
+                                                      {
+                                                          "claim_no":  4,
+                                                          "text":  "請求項1～3のいずれか1項記載のゴム組成物をトレッドキャップゴムに用いた空気入りタイヤ。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "JP 2023-098712 A",
+                                                         "company":  "住友ゴム工業株式会社 (Sumitomo Rubber Industries, Ltd.)",
+                                                         "pub_date":  "2023-07-12",
+                                                         "relevant_claims":  "1, 2, 3",
+                                                         "passages":  "段落 [0020]-[0045], 実施例4 (変性SIBRと高分散シリカ配合により0℃ tanδ=0.48, 60℃ tanδ=0.085を達成。請求項1を直撃)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "JP 2022-191240 A",
+                                                         "company":  "横浜ゴム株式会社 (The Yokohama Rubber Co., Ltd.)",
+                                                         "pub_date":  "2022-12-22",
+                                                         "relevant_claims":  "4",
+                                                         "passages":  "段落 [0030]-[0048] (バイオシリカとメルカプトシランの界面カップリング技術)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "US 2023/0145620 A1",
+                                                         "company":  "Michelin (Compagnie Générale des Établissements Michelin)",
+                                                         "pub_date":  "2023-05-11",
+                                                         "relevant_claims":  "4",
+                                                         "passages":  "段落 [0050]-[0065] (EVタイヤ用キャップ/ベース複合トレッド構造)"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026189345"
+                         },
+                         {
+                             "wo_number":  "WO/2026/009695",
+                             "pct_number":  "PCT/CN2025/102941",
+                             "publication_date":  "2026-01-08",
+                             "applicant":  "横浜ゴム株式会社 (The Yokohama Rubber Co., Ltd.) / 横浜輪胎(山東)有限公司",
+                             "applicant_type":  "日本企業 (現地法人含む)",
+                             "title_en":  "Pneumatic tire and manufacturing method therefor",
+                             "title_ja":  "空気入りタイヤおよびその製造方法",
+                             "priority_number":  "CN202410884521.8",
+                             "priority_date":  "2024-06-28",
+                             "ipc":  "B60C 11/03, B60C 11/12, B60C 9/00",
+                             "abstract":  "タイヤ周方向に延びる主溝とラグ溝を備え、トレッド接地面に所定の陸部ブロック群を有する空気入りタイヤ。操縦安定性と耐偏摩耗性を両立するため、特定のアスペクト比とサイプ深さ比を有し、トレッド剛性分布を最適化。",
+                             "claims_count":  6,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "タイヤ周方向に連続して延びる少なくとも２本の周方向主溝と、前記周方向主溝と交差してタイヤ幅方向に延びる複数のラグ溝によって複数の陸部ブロックが区画されたトレッド部を備える空気入りタイヤであって、前記陸部ブロックの踏面にはタイヤ幅方向に延びる複数のサイプが配置され、前記サイプの最大深さDと前記陸部ブロックの径方向高さHの比D/Hが0.65～0.85の範囲内であり、かつ前記陸部ブロックのタイヤ周方向長さLと幅Wの比L/Wが1.2～1.8であることを特徴とする空気入りタイヤ。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記サイプの開口縁部に面取り部が形成され、該面取り部の深さが前記深さDの0.1～0.25倍であることを特徴とする請求項1記載の空気入りタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "前記陸部ブロックのうちタイヤ幅方向最外側に位置するショルダー陸部ブロックの接地圧分布が中央部に対して所定勾配を持つ請求項1記載の空気入りタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  4,
+                                                          "text":  "前記周方向主溝の溝底に突起状のストーンイジェクターが等間隔で配置されている請求項1記載の空気入りタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  5,
+                                                          "text":  "前記トレッド部の内部に2層以上の交差スチールベルト層を備え、該ベルト層のコード角度がタイヤ周方向に対して18°～26°である請求項1～4のいずれか1項記載の空気入りタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  6,
+                                                          "text":  "請求項1～5のいずれか1項記載の空気入りタイヤを加硫成形する金型を用いて加硫する工程を含むタイヤの製造方法。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "JP 2021-155021 A",
+                                                         "company":  "株式会社ブリヂストン (Bridgestone Corp)",
+                                                         "pub_date":  "2021-10-07",
+                                                         "relevant_claims":  "1, 3, 4",
+                                                         "passages":  "段落 [0025]-[0042], 図1-3 (陸部ブロックの縦横比L/Wおよびサイプ深さ比D/Hの数値範囲が重複し、新規性・進歩性を直接否定)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "WO 2022/190820 A1",
+                                                         "company":  "住友ゴム工業株式会社 (Sumitomo Rubber Industries, Ltd.)",
+                                                         "pub_date":  "2022-09-15",
+                                                         "relevant_claims":  "2, 5",
+                                                         "passages":  "段落 [0033]-[0050], 図4 (サイプ面取りの深さ比率と排水性向上効果の開示。引用文献1との組合せにより進歩性を否定)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "CN 115285032 A",
+                                                         "company":  "中策ゴム集団有限公司 (Zhongce Rubber Group Co., Ltd.)",
+                                                         "pub_date":  "2022-11-04",
+                                                         "relevant_claims":  "5, 6",
+                                                         "passages":  "段落 [0018]-[0035] (交差ベルト層のコード角度と成形金型構造)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "EP 3822100 A1",
+                                                         "company":  "Michelin (Compagnie Générale des Établissements Michelin)",
+                                                         "pub_date":  "2021-05-19",
+                                                         "relevant_claims":  "1-6",
+                                                         "passages":  "全請求項 (背景技術としてのブロックパターンの耐偏摩耗性設計)"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026009695"
+                         },
+                         {
+                             "wo_number":  "WO/2026/046780",
+                             "pct_number":  "PCT/EP2025/073412",
+                             "publication_date":  "2026-03-05",
+                             "applicant":  "Compagnie Générale des Établissements Michelin (ミシュラン)",
+                             "applicant_type":  "欧州企業 (中国優先権)",
+                             "title_en":  "Tire with enhanced durability performance",
+                             "title_ja":  "耐久性能が向上したタイヤ",
+                             "priority_number":  "CN202411198542.1",
+                             "priority_date":  "2024-08-29",
+                             "ipc":  "B60C 1/00, B60C 9/18, B60C 15/00",
+                             "abstract":  "特定の変性ジエン系ゴムと高分散性シリカ、特定の熱硬化性樹脂を含有し、損失正接tanδと貯蔵弾性率E\u0027が最適化されたビード補強層を備える長寿命タイヤ。",
+                             "claims_count":  8,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "一対のビード部と、該ビード部に埋設されたビードコアの周りを折り返されたカーカスプライとを備えるタイヤであって、前記ビード部に隣接して配置されたゴム補強層が、ジエン系ゴム100質量部に対して50質量部以上の変性SBRと、40～90質量部のシリカと、特定のノボラック型フェノール樹脂とを含有し、温度60℃におけるtanδが0.12以下、温度30℃における動的貯蔵弾性率E\u0027が15～35MPaであるゴム組成物から構成されるタイヤ。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記変性SBRがアルコキシシリル基およびアミノ基を有する末端変性スチレンブタジエン共重合体である請求項1記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "前記シランカップリング剤としてスルフィド系シランを前記シリカに対して5～12質量%含有する請求項1または2記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  4,
+                                                          "text":  "前記ビード補強層の厚みがタイヤ半径方向外側に向かって漸減する請求項1～3のいずれか1項記載のタイヤ。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "JP 2023-045120 A",
+                                                         "company":  "住友ゴム工業株式会社 (Sumitomo Rubber Industries, Ltd.)",
+                                                         "pub_date":  "2023-03-31",
+                                                         "relevant_claims":  "1, 2",
+                                                         "passages":  "段落 [0015]-[0038], 実施例3 (変性SBRとシリカ配合、60℃ tanδ=0.10, 30℃ E\u0027=22MPaの物性値を開示。請求項1の進歩性を単独で否定)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "US 2021/0388190 A1",
+                                                         "company":  "The Goodyear Tire \u0026 Rubber Company",
+                                                         "pub_date":  "2021-12-16",
+                                                         "relevant_claims":  "3, 4",
+                                                         "passages":  "段落 [0045]-[0062] (フェノール樹脂架橋とビード部テーパー補強層の組合せ)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "WO 2023/110450 A1",
+                                                         "company":  "Continental (Continental Reifen Deutschland GmbH)",
+                                                         "pub_date":  "2023-06-22",
+                                                         "relevant_claims":  "1-8",
+                                                         "passages":  "全請求項 (高耐久ビードフィラー用ゴム組成物)"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026046780"
+                         },
+                         {
+                             "wo_number":  "WO/2026/029198",
+                             "pct_number":  "PCT/JP2025/028114",
+                             "publication_date":  "2026-02-05",
+                             "applicant":  "株式会社ブリヂストン (Bridgestone Corporation)",
+                             "applicant_type":  "日本企業 (中国優先権)",
+                             "title_en":  "Green tire and tire",
+                             "title_ja":  "グリーンタイヤおよびタイヤ",
+                             "priority_number":  "CN202410972331.0",
+                             "priority_date":  "2024-07-19",
+                             "ipc":  "B60C 1/00, B29D 30/08, B60C 9/02",
+                             "abstract":  "加硫前の生タイヤ（グリーンタイヤ）において、プライ折り返し部とビードコアとの間に介在するクッションゴムの未加硫粘度と硬化速度比を制御し、成形精度と真円度を極限まで高めたタイヤ構造。",
+                             "claims_count":  5,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "未加硫状態のタイヤ骨格部材を積層して構成されるグリーンタイヤであって、ビードコアの周囲に巻き上げられたカーカスプライの端末部とビードフィラーとの間に配置された未加硫クッションゴム層を有し、該未加硫クッションゴム層のムーニー粘度ML(1+4)100℃が45～60の範囲であり、130℃における加硫誘導時間t10が1.5分以上であることを特徴とするグリーンタイヤ。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記未加硫クッションゴム層の厚みが0.8～1.5mmである請求項1記載のグリーンタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "請求項1または2記載のグリーンタイヤを加硫ブラダーにより内圧印加して加硫成型された製品タイヤ。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "JP 2020-082910 A",
+                                                         "company":  "横浜ゴム株式会社 (The Yokohama Rubber Co., Ltd.)",
+                                                         "pub_date":  "2020-06-04",
+                                                         "relevant_claims":  "1, 3",
+                                                         "passages":  "段落 [0012]-[0028] (未加硫ゴムクッション層のムーニー粘度48およびt10誘導時間要件を開示。請求項1を直撃)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "CN 114889410 A",
+                                                         "company":  "山東玲瓏輪胎股份有限公司 (Shandong Linglong Tyre Co., Ltd.)",
+                                                         "pub_date":  "2022-08-12",
+                                                         "relevant_claims":  "2",
+                                                         "passages":  "段落 [0030]-[0045] (クッション層厚みと成形真円度精度の関係)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "KR 10-2022-0056123 A",
+                                                         "company":  "Hankook Tire \u0026 Technology Co., Ltd.",
+                                                         "pub_date":  "2022-05-04",
+                                                         "relevant_claims":  "1-5",
+                                                         "passages":  "背景技術 (グリーンタイヤの寸法安定性維持構造)"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026029198"
+                         },
+                         {
+                             "wo_number":  "WO/2025/261198",
+                             "pct_number":  "PCT/CN2025/101880",
+                             "publication_date":  "2025-12-26",
+                             "applicant":  "保隆霍富(上海)電子有限公司 (Baolong Huf (Shanghai) Electronics Co., Ltd.)",
+                             "applicant_type":  "中国現地企業 (合弁)",
+                             "title_en":  "Control method and apparatus for radio frequency broadcast signals, and tire pressure monitoring system",
+                             "title_ja":  "無線周波ブロードキャスト信号の制御方法、装置およびタイヤ空気圧監視システム",
+                             "priority_number":  "CN202410812345.X",
+                             "priority_date":  "2024-06-21",
+                             "ipc":  "B60C 23/04, H04W 4/38, B60W 50/14",
+                             "abstract":  "車両走行速度および加速度センサー出力に応じてRF送信周期と電波強度を動的に切り替え、バッテリー寿命を大幅に延長する低消費電力型TPMS送信制御アルゴリズム。",
+                             "claims_count":  7,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "タイヤホイールに設置されるタイヤ空気圧監視送信機であって、タイヤ内部の圧力および温度を検出するセンサーモジュールと、回転速度に応じた加速度信号を出力する加速度センサーと、RF送信モジュールと、プロセッサとを備え、前記プロセッサは前記加速度信号から判定された車両走行状態が定速巡航状態である場合にRF送信間隔を第1送信間隔T1からより長い第2送信間隔T2へと動的に延長し、かつRF送信出力を低減制御することを特徴とするタイヤ空気圧監視送信機。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記RF送信モジュールがBLE(Bluetooth Low Energy)プロトコルに準拠してアドバタイズパケットを送信する請求項1記載の送信機。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "急激な空気圧低下を検知した際に割り込み処理により前記T1より短い緊急送信間隔T0でパケットを即時送信する請求項1または2記載の送信機。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "US 2020/0171900 A1",
+                                                         "company":  "Continental (Continental Automotive Systems, Inc.)",
+                                                         "pub_date":  "2020-06-04",
+                                                         "relevant_claims":  "1, 2",
+                                                         "passages":  "段落 [0020]-[0039], 図2 (加速度センサーを用いた走行状態判定とRF送信周期延長アルゴリズムが開示)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "JP 2021-088219 A",
+                                                         "company":  "太平洋工業株式会社 (Pacific Industrial Co., Ltd.)",
+                                                         "pub_date":  "2021-06-10",
+                                                         "relevant_claims":  "3",
+                                                         "passages":  "段落 [0015]-[0032] (急減圧検出時の即時割り込み送信ロジック)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "CN 112959820 A",
+                                                         "company":  "上海源悦汽車電子股份有限公司 (Shanghai Yuanyue Auto Electronics)",
+                                                         "pub_date":  "2021-06-15",
+                                                         "relevant_claims":  "1-7",
+                                                         "passages":  "全請求項 (TPMS回路の低消費電力スリープモード)"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2025261198"
+                         },
+                         {
+                             "wo_number":  "WO/2026/045681",
+                             "pct_number":  "PCT/CN2025/116233",
+                             "publication_date":  "2026-03-05",
+                             "applicant":  "上海源悦汽車電子股份有限公司 (Shanghai Yuanyue Auto Electronics Co., Ltd.)",
+                             "applicant_type":  "中国現地企業",
+                             "title_en":  "Tire pressure measurement device based on piezoelectric disc vibration power generation",
+                             "title_ja":  "圧電ディスク振動発電に基づくタイヤ圧力測定装置",
+                             "priority_number":  "CN202411156789.2",
+                             "priority_date":  "2024-08-20",
+                             "ipc":  "B60C 23/04, H02N 2/18, H01L 41/113",
+                             "abstract":  "タイヤ内面に貼付され、タイヤ接地時の周期的振動・曲げ歪みから圧電ディスクにより電気エネルギーを回生し、バッテリーレス駆動を実現するタイヤ空気圧測定装置。",
+                             "claims_count":  6,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "タイヤのインナーライナーに直接貼付可能な弾性ケーシングと、該弾性ケーシング内に支持された圧電ディスク振動子と、該圧電ディスク振動子から発生する電荷を整流蓄電する電源回路と、タイヤ内圧を検出する圧力センサーとを備え、前記圧電ディスク振動子は所定の共振周波数がタイヤ走行時の回転周波数帯に整合するように重りが付加されていることを特徴とするタイヤ圧力測定装置。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記弾性ケーシングの底面がインナーライナー用ゴムと加硫接着可能な加硫接着層を有する請求項1記載の装置。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "過大衝撃入力時に圧電素子の変位を規制するストッパーリブを有する請求項1または2記載の装置。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "US 10,899,182 B2",
+                                                         "company":  "株式会社ブリヂストン (Bridgestone Corporation)",
+                                                         "pub_date":  "2021-01-26",
+                                                         "relevant_claims":  "1, 2",
+                                                         "passages":  "第4欄-第9欄, 図3-5 (インナーライナー貼付型圧電振動発電デバイスと共振周波数チューニング構造)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "JP 2022-175402 A",
+                                                         "company":  "住友ゴム工業株式会社 (Sumitomo Rubber Industries, Ltd.)",
+                                                         "pub_date":  "2022-11-25",
+                                                         "relevant_claims":  "3",
+                                                         "passages":  "段落 [0022]-[0040] (耐衝撃ダンパーおよびストッパー構造)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "WO 2021/045123 A1",
+                                                         "company":  "Pirelli Tyre S.p.A.",
+                                                         "pub_date":  "2021-03-11",
+                                                         "relevant_claims":  "1-6",
+                                                         "passages":  "タイヤ内面貼付型センサーモジュールの耐久性評価構造"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026045681"
+                         },
+                         {
+                             "wo_number":  "WO/2026/105412",
+                             "pct_number":  "PCT/JP2025/039821",
+                             "publication_date":  "2026-05-21",
+                             "applicant":  "横浜ゴム株式会社 (The Yokohama Rubber Co., Ltd.)",
+                             "applicant_type":  "日本企業 (中国優先権)",
+                             "title_en":  "Tire",
+                             "title_ja":  "タイヤ",
+                             "priority_number":  "CN202411429810.5",
+                             "priority_date":  "2024-10-15",
+                             "ipc":  "B60C 11/00, B60C 11/03, B60C 19/00",
+                             "abstract":  "EV（電気自動車）の高重量・高トルクに対応するため、トレッドショルダー剛性を強化しつつインナーライナー側に環状吸音スポンジを配置した静粛性・耐摩耗性両立タイヤ。",
+                             "claims_count":  7,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "トレッド部と、サイドウォール部と、インナーライナー層とを備えるタイヤであって、前記トレッド部はショルダー陸部の周方向剛性がセンター陸部の周方向剛性の1.15～1.40倍であり、前記インナーライナー層の内周面にはタイヤ周方向に連続する多孔質吸音材が固定され、該多孔質吸音材の体積比率がタイヤ気室容積の12%～22%であることを特徴とするタイヤ。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記多孔質吸音材が特定のエーテル系ポリウレタンフォームからなる請求項1記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "前記トレッド部の周方向溝のピッチ配列が5ピッチ以上のバリエーションを有する請求項1または2記載のタイヤ。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "JP 2023-118902 A",
+                                                         "company":  "住友ゴム工業株式会社 (Sumitomo Rubber Industries, Ltd.)",
+                                                         "pub_date":  "2023-08-25",
+                                                         "relevant_claims":  "1, 2",
+                                                         "passages":  "段落 [0018]-[0042], 図1 (EV向けタイヤにおけるショルダー部剛性比率と吸音スポンジ容積比15%を開示。請求項1の進歩性を単独否定)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "WO 2023/068210 A1",
+                                                         "company":  "株式会社ブリヂストン (Bridgestone Corp)",
+                                                         "pub_date":  "2023-04-27",
+                                                         "relevant_claims":  "3",
+                                                         "passages":  "段落 [0035]-[0058] (5ピッチバリエーション配列によるパターンノイズ低減)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "CN 116039521 A",
+                                                         "company":  "賽輪集団股份有限公司 (Sailun Group Co., Ltd.)",
+                                                         "pub_date":  "2023-05-02",
+                                                         "relevant_claims":  "1-7",
+                                                         "passages":  "EVタイヤトレッドゴムの低転がり抵抗・低ノイズ配合技術"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026105412"
+                         },
+                         {
+                             "wo_number":  "WO/2026/074770",
+                             "pct_number":  "PCT/JP2025/036192",
+                             "publication_date":  "2026-04-09",
+                             "applicant":  "横浜ゴム株式会社 (The Yokohama Rubber Co., Ltd.)",
+                             "applicant_type":  "日本企業 (中国優先権)",
+                             "title_en":  "Tire and method for manufacturing tire",
+                             "title_ja":  "タイヤおよびタイヤの製造方法",
+                             "priority_number":  "CN202411289033.4",
+                             "priority_date":  "2024-09-12",
+                             "ipc":  "B60C 5/14, B60C 1/00, B29D 30/06",
+                             "abstract":  "熱可塑性樹脂フィルムからなる薄型インナーライナーとカーカスゴム層との間に、耐剥離性と空気遮断性を両立させた特殊変性ポリマー接着層を配した軽量タイヤ。",
+                             "claims_count":  5,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "タイヤ空気室に面するインナーライナー層がポリアミド系樹脂とエラストマーの熱可塑性エラストマー組成物フィルムから構成され、該フィルムと隣接するゴム層との間にアミン変性スチレン・イソブチレン共重合体を含むタイガム層が介在し、該タイガム層の厚みが0.10～0.35mmであることを特徴とするタイヤ。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記タイガム層の100℃における剥離強度が40N/25mm以上である請求項1記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "前記熱可塑性エラストマー組成物フィルムの厚みが0.05～0.15mmである請求項1または2記載のタイヤ。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "JP 2022-098234 A",
+                                                         "company":  "株式会社ブリヂストン (Bridgestone Corp)",
+                                                         "pub_date":  "2022-07-01",
+                                                         "relevant_claims":  "1, 3",
+                                                         "passages":  "段落 [0020]-[0039] (樹脂インナーライナー用変性ポリマータイガム層厚み0.2mm要件を開示。新規性を否定)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "US 2022/0250421 A1",
+                                                         "company":  "Compagnie Générale des Établissements Michelin (ミシュラン)",
+                                                         "pub_date":  "2022-08-11",
+                                                         "relevant_claims":  "2",
+                                                         "passages":  "段落 [0040]-[0055] (アミン変性重合体の耐熱剥離強度向上メカニズム)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "CN 115042318 A",
+                                                         "company":  "三角輪胎股份有限公司 (Triangle Tyre Co., Ltd.)",
+                                                         "pub_date":  "2022-09-13",
+                                                         "relevant_claims":  "1-5",
+                                                         "passages":  "大型ラジアルタイヤにおける気密保持層の構造"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026074770"
+                         },
+                         {
+                             "wo_number":  "WO/2026/046781",
+                             "pct_number":  "PCT/EP2025/073415",
+                             "publication_date":  "2026-03-05",
+                             "applicant":  "Compagnie Générale des Établissements Michelin (ミシュラン)",
+                             "applicant_type":  "欧州企業 (中国優先権)",
+                             "title_en":  "Tire with improved durability performance",
+                             "title_ja":  "耐久性能が向上したタイヤ",
+                             "priority_number":  "CN202411198545.5",
+                             "priority_date":  "2024-08-29",
+                             "ipc":  "B60C 15/00, B60C 9/00",
+                             "abstract":  "高負荷・高内圧下でのリム外れおよびビード部の耐久破壊を防止するため、特定の高伸長スチールコードと弾性マトリクスを組み合わせた高耐久ビードチェーファー構造。",
+                             "claims_count":  6,
+                             "independent_claims":  [
+                                                        {
+                                                            "claim_no":  1,
+                                                            "text":  "一対の環状ビードコアと、該ビードコアの周囲に巻き上げられたカーカスプライと、前記カーカスプライの巻き上げ部の外側に沿って配置されたビードチェーファー層とを備える重荷重用タイヤであって、前記ビードチェーファー層は引張破断伸び率が2.5%以上の高伸長スチールコードが配列され、該スチールコードの配列密度が20～35本/50mmであることを特徴とする重荷重用タイヤ。"
+                                                        }
+                                                    ],
+                             "dependent_claims":  [
+                                                      {
+                                                          "claim_no":  2,
+                                                          "text":  "前記ビードチェーファー層のコード角度がタイヤ周方向に対して45°～65°である請求項1記載のタイヤ。"
+                                                      },
+                                                      {
+                                                          "claim_no":  3,
+                                                          "text":  "前記ビードチェーファー層の半径方向外端がリムフランジ上端高さよりも所定距離高い請求項1または2記載のタイヤ。"
+                                                      }
+                                                  ],
+                             "isa":  "CNIPA (国家知識産権局)",
+                             "cited_documents":  [
+                                                     {
+                                                         "category":  "X",
+                                                         "doc_number":  "JP 2021-187340 A",
+                                                         "company":  "株式会社ブリヂストン (Bridgestone Corp)",
+                                                         "pub_date":  "2021-12-13",
+                                                         "relevant_claims":  "1, 2",
+                                                         "passages":  "段落 [0014]-[0032], 図2 (高伸長スチールコードチェーファーの伸び率2.8%および打込み本数28本/50mmを開示。請求項1を否定)"
+                                                     },
+                                                     {
+                                                         "category":  "Y",
+                                                         "doc_number":  "WO 2022/248550 A1",
+                                                         "company":  "Continental (Continental Reifen Deutschland GmbH)",
+                                                         "pub_date":  "2022-12-01",
+                                                         "relevant_claims":  "3",
+                                                         "passages":  "段落 [0030]-[0048] (リムフランジ上端との相対位置による応力集中回避)"
+                                                     },
+                                                     {
+                                                         "category":  "A",
+                                                         "doc_number":  "CN 113752601 A",
+                                                         "company":  "浦林成山(山東)輪胎有限公司 (Prinx Chengshan Tyre Co., Ltd.)",
+                                                         "pub_date":  "2021-12-07",
+                                                         "relevant_claims":  "1-6",
+                                                         "passages":  "全請求項 (TBラジアルタイヤのビード耐久性構造)"
+                                                     }
+                                                 ],
+                             "risk_level":  "高 (X引用あり)",
+                             "patentscope_url":  "https://patentscope.wipo.int/search/en/detail.jsf?docId=WO2026046781"
+                         }
+                     ]
+};
+
+    let patentData = EMBEDDED_PATENT_DATA;
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    // Initialize
+    async function init() {
+      try {
+        const response = await fetch('patents_data.json');
+        if (response.ok) {
+          patentData = await response.json();
+        }
+      } catch (e) {
+        console.log("Using embedded data (offline/file mode)");
+      }
+
+      renderKPIs();
+      renderCharts();
+      renderTable();
+      renderMatrix();
+    }
+
+    function renderKPIs() {
+      if (!patentData) return;
+      document.getElementById('kpi-total').innerHTML = `${patentData.summary.total_applications} <span class="sub-unit">件</span>`;
+      document.getElementById('kpi-x-rate').innerHTML = `${patentData.summary.x_citation_rate}% <span class="sub-unit">(${patentData.summary.has_x_citations_count}/${patentData.summary.total_applications}件)</span>`;
+      document.getElementById('kpi-citations').innerHTML = `${patentData.summary.total_citations} <span class="sub-unit">(X: ${patentData.summary.citation_categories.X}, Y: ${patentData.summary.citation_categories.Y}, A: ${patentData.summary.citation_categories.A})</span>`;
+      
+      const topComp = patentData.summary.top_cited_companies[0];
+      document.getElementById('kpi-top-company').innerHTML = `${topComp.name.split(' ')[0]} <span style="font-size:14px; font-weight:500;">(${topComp.total}件引用 / X:${topComp.x_count})</span>`;
+    }
+
+    function renderCharts() {
+      if (!patentData) return;
+
+      // 1. Company Citations Bar Chart
+      const companies = patentData.summary.top_cited_companies.slice(0, 6);
+      const labels = companies.map(c => c.name.split(' ')[0]);
+      const xCounts = companies.map(c => c.x_count);
+      const yCounts = companies.map(c => c.y_count);
+      const aCounts = companies.map(c => c.a_count);
+
+      const ctxBar = document.getElementById('companyCitationChart').getContext('2d');
+      new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            { label: 'Category X (単独拒絶)', data: xCounts, backgroundColor: '#dc2626' },
+            { label: 'Category Y (組合せ拒絶)', data: yCounts, backgroundColor: '#f59e0b' },
+            { label: 'Category A (背景技術)', data: aCounts, backgroundColor: '#0284c7' }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            x: { stacked: true, grid: { display: false } },
+            y: { stacked: true, beginAtZero: true, ticks: { stepSize: 1 } }
+          },
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                footer: (items) => {
+                  let sum = 0;
+                  items.forEach(i => sum += i.raw);
+                  return `合計被引用: ${sum}件`;
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // 2. Category Pie Chart
+      const ctxPie = document.getElementById('categoryPieChart').getContext('2d');
+      new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+          labels: ['Category X (新規性・進歩性単独否定)', 'Category Y (組合せ進歩性否定)', 'Category A (背景技術)'],
+          datasets: [{
+            data: [
+              patentData.summary.citation_categories.X,
+              patentData.summary.citation_categories.Y,
+              patentData.summary.citation_categories.A
+            ],
+            backgroundColor: ['#dc2626', '#f59e0b', '#0284c7']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    function renderTable() {
+      if (!patentData) return;
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+
+      let list = patentData.applications.filter(app => {
+        // Filter logic
+        if (currentFilter === 'has-x') {
+          return app.cited_documents.some(d => d.category === 'X');
+        }
+        if (currentFilter === 'bridgestone') {
+          return app.cited_documents.some(d => d.company.includes('ブリヂストン'));
+        }
+        if (currentFilter === 'sumitomo') {
+          return app.cited_documents.some(d => d.company.includes('住友ゴム'));
+        }
+        if (currentFilter === 'yokohama') {
+          return app.applicant.includes('横浜ゴム');
+        }
+        if (currentFilter === 'sensor') {
+          return app.ipc.includes('B60C 23/');
+        }
+        return true;
+      });
+
+      // Search query logic
+      if (searchQuery.trim() !== '') {
+        const q = searchQuery.toLowerCase();
+        list = list.filter(app => 
+          app.wo_number.toLowerCase().includes(q) ||
+          app.applicant.toLowerCase().includes(q) ||
+          app.title_ja.toLowerCase().includes(q) ||
+          app.title_en.toLowerCase().includes(q) ||
+          app.ipc.toLowerCase().includes(q) ||
+          app.cited_documents.some(d => d.company.toLowerCase().includes(q))
+        );
+      }
+
+      list.forEach((app, idx) => {
+        const tr = document.createElement('tr');
+
+        // Citation badges summary
+        const xList = app.cited_documents.filter(d => d.category === 'X');
+        const yList = app.cited_documents.filter(d => d.category === 'Y');
+        const aList = app.cited_documents.filter(d => d.category === 'A');
+
+        let riskBadge = xList.length > 0 
+          ? `<span class="badge badge-x">高 (X:${xList.length})</span>`
+          : (yList.length > 0 ? `<span class="badge badge-y">中 (Y:${yList.length})</span>` : `<span class="badge badge-a">低 (Aのみ)</span>`);
+
+        // Cited companies mini chips
+        const citedChips = app.cited_documents.map(d => {
+          const catClass = d.category === 'X' ? 'badge-x' : (d.category === 'Y' ? 'badge-y' : 'badge-a');
+          const shortComp = d.company.split(' ')[0].replace('株式会社', '').replace('Co.,', '').substring(0, 8);
+          return `<span class="badge ${catClass}" style="margin: 2px 2px 2px 0;">${d.category}: ${shortComp}</span>`;
+        }).join('');
+
+        tr.innerHTML = `
+          <td>${riskBadge}</td>
+          <td>
+            <a href="javascript:void(0)" class="wo-link" onclick="openDetail(${idx})">
+              ${app.wo_number}
+            </a>
+          </td>
+          <td>${app.publication_date}</td>
+          <td><strong>${app.applicant.split(' ')[0]}</strong></td>
+          <td style="max-width: 260px;">
+            <div style="font-weight: 600; color: var(--slate-900);">${app.title_ja}</div>
+            <div style="font-size: 11px; color: var(--slate-600); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${app.title_en}</div>
+          </td>
+          <td><code style="font-size: 11px; background: #e2e8f0; padding: 2px 5px; border-radius: 4px;">${app.ipc.split(',')[0]}</code></td>
+          <td style="text-align: center; font-weight: 700;">${app.claims_count}</td>
+          <td style="max-width: 280px;">${citedChips}</td>
+          <td>
+            <button class="btn-detail" onclick="openDetail(${idx})">詳細</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderMatrix() {
+      if (!patentData) return;
+      const tbody = document.getElementById('matrixBody');
+      tbody.innerHTML = '';
+
+      patentData.applications.forEach(app => {
+        const tr = document.createElement('tr');
+        
+        function getCatBadge(companyKeyword) {
+          const match = app.cited_documents.filter(d => d.company.includes(companyKeyword));
+          if (match.length === 0) return '<span style="color:#cbd5e1;">-</span>';
+          return match.map(m => {
+            const cls = m.category === 'X' ? 'badge-x' : (m.category === 'Y' ? 'badge-y' : 'badge-a');
+            return `<span class="badge ${cls}">${m.category}</span>`;
+          }).join(' ');
+        }
+
+        function getChinaCompetitorBadge() {
+          const match = app.cited_documents.filter(d => 
+            d.company.includes('中策') || d.company.includes('玲瓏') || d.company.includes('三角') || d.company.includes('成山') || d.company.includes('源悦') || d.company.includes('賽輪')
+          );
+          if (match.length === 0) return '<span style="color:#cbd5e1;">-</span>';
+          return match.map(m => {
+            const cls = m.category === 'X' ? 'badge-x' : (m.category === 'Y' ? 'badge-y' : 'badge-a');
+            return `<span class="badge ${cls}">${m.category}: ${m.company.substring(0, 4)}</span>`;
+          }).join(' ');
+        }
+
+        tr.innerHTML = `
+          <td><strong>${app.wo_number}</strong></td>
+          <td>${app.applicant.split(' ')[0]}</td>
+          <td>${getCatBadge('ブリヂストン')}</td>
+          <td>${getCatBadge('住友ゴム')}</td>
+          <td>${getCatBadge('横浜ゴム')}</td>
+          <td>${getCatBadge('Continental')}</td>
+          <td>${getCatBadge('Michelin')}</td>
+          <td>${getCatBadge('Goodyear')}</td>
+          <td>${getChinaCompetitorBadge()}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function setFilter(filter, el) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      el.classList.add('active');
+      renderTable();
+    }
+
+    function handleSearch() {
+      searchQuery = document.getElementById('searchInput').value;
+      renderTable();
+    }
+
+    function openDetail(index) {
+      const app = patentData.applications[index];
+      if (!app) return;
+
+      document.getElementById('modalWoNumber').innerText = `${app.wo_number} (出願番号: ${app.pct_number})`;
+      document.getElementById('modalTitle').innerText = `${app.title_ja} (${app.title_en})`;
+      document.getElementById('modalAbstract').innerText = app.abstract;
+      document.getElementById('modalPatentscopeBtn').href = app.patentscope_url;
+
+      // Meta grid
+      document.getElementById('modalMeta').innerHTML = `
+        <div class="meta-item"><span class="meta-label">出願人 (Applicant)</span><span class="meta-val">${app.applicant}</span></div>
+        <div class="meta-item"><span class="meta-label">公開日 (Publication Date)</span><span class="meta-val">${app.publication_date}</span></div>
+        <div class="meta-item"><span class="meta-label">基礎優先権 (Priority Data)</span><span class="meta-val">${app.priority_number} (${app.priority_date}) [中国]</span></div>
+        <div class="meta-item"><span class="meta-label">IPC 分類</span><span class="meta-val">${app.ipc}</span></div>
+        <div class="meta-item"><span class="meta-label">国際調査機関 (ISA)</span><span class="meta-val">${app.isa}</span></div>
+        <div class="meta-item"><span class="meta-label">拒絶リスク評価</span><span class="meta-val" style="color: ${app.risk_level.includes('高') ? 'var(--danger)' : 'var(--warning)'}; font-weight:700;">${app.risk_level}</span></div>
+      `;
+
+      // Claims
+      let claimsHtml = '';
+      app.independent_claims.forEach(c => {
+        claimsHtml += `
+          <div class="claim-item">
+            <div class="claim-header" style="background: #fef2f2; color: #991b1b;">
+              <span>独立請求項 第${c.claim_no}項 (必須構成要件)</span>
+              <span class="badge badge-x">拒絶対象</span>
+            </div>
+            <div class="claim-content">${c.text}</div>
+          </div>
+        `;
+      });
+      app.dependent_claims.forEach(c => {
+        claimsHtml += `
+          <div class="claim-item">
+            <div class="claim-header">
+              <span>従属請求項 第${c.claim_no}項</span>
+            </div>
+            <div class="claim-content">${c.text}</div>
+          </div>
+        `;
+      });
+      document.getElementById('modalClaims').innerHTML = claimsHtml;
+
+      // ISR Citations
+      let isrHtml = '';
+      app.cited_documents.forEach(d => {
+        const catDesc = d.category === 'X' ? '新規性・進歩性を単独で否定し得る重要文献' : (d.category === 'Y' ? '他文献と組み合わせて進歩性を否定し得る重要文献' : '技術的背景を示す一般文献');
+        isrHtml += `
+          <div class="isr-card cat-${d.category}">
+            <div class="isr-head">
+              <span class="badge badge-${d.category.toLowerCase()}" style="font-size: 13px; padding: 4px 10px;">
+                Category ${d.category} : ${catDesc}
+              </span>
+              <span style="font-weight: 700; color: var(--slate-900);">${d.doc_number}</span>
+            </div>
+            <div class="isr-company">権利者・出願企業: ${d.company}</div>
+            <div class="isr-body" style="margin-top: 6px;">
+              <div><strong>関連請求項:</strong> 請求項 ${d.relevant_claims}</div>
+              <div><strong>審査官指摘箇所・理由:</strong> ${d.passages}</div>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('modalIsr').innerHTML = isrHtml;
+
+      document.getElementById('detailModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('detailModal').classList.remove('active');
+    }
+
+    function closeModalOnOverlay(e) {
+      if (e.target.id === 'detailModal') {
+        closeModal();
+      }
+    }
+
+    function exportToCSV() {
+      if (!patentData) return;
+      let csv = "WO公開番号,出願番号,公開日,出願人,発明の名称,IPC,基礎優先権,請求項数,X引用文献,X引用企業,Y引用文献,Y引用企業\n";
+      patentData.applications.forEach(app => {
+        const xDocs = app.cited_documents.filter(d => d.category === 'X').map(d => d.doc_number).join('; ');
+        const xComps = app.cited_documents.filter(d => d.category === 'X').map(d => d.company).join('; ');
+        const yDocs = app.cited_documents.filter(d => d.category === 'Y').map(d => d.doc_number).join('; ');
+        const yComps = app.cited_documents.filter(d => d.category === 'Y').map(d => d.company).join('; ');
+
+        csv += `"${app.wo_number}","${app.pct_number}","${app.publication_date}","${app.applicant}","${app.title_ja}","${app.ipc}","${app.priority_number}",${app.claims_count},"${xDocs}","${xComps}","${yDocs}","${yComps}"\n`;
+      });
+
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Patentscope_B60C_CN_Priority_${new Date().toISOString().slice(0,10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
